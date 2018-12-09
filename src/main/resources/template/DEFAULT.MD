@@ -14,10 +14,11 @@
 
 |参数名|必选|类型|说明|
 |:----    |:---|:----- |-----   |
-|username |是  |String |用户名   |
-|password |是  |String |密码     |
+|${paramName} |${paramRequired}  |${paramType} |${paramDescription}   |
 
- **返回示例**
+
+
+**返回示例**
 
 ``` 
   {
