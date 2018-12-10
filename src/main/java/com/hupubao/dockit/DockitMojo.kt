@@ -47,55 +47,61 @@ class DockitMojo : AbstractMojo() {
         }
 
 
-        var templateText = DockitMojo::class.java.getResource(template).readText(Charset.forName(templateCharset))
+        val templateText = DockitMojo::class.java.getResource(template).readText(Charset.forName(templateCharset))
 
         val classNodeList = CommentUtils.parseComments(project)
 
+
+        if (outDir == "DEFAULT") {
+            outDir = Paths.get(project.build.directory, "dockit").toString()
+        }
+
         classNodeList.parallelStream().forEach { classNode ->
+
+            val outDirectory = Paths.get(outDir, if (classNode.classDescription == null) classNode.className else classNode.classDescription).toString()
             classNode.methodCommentNodeList.parallelStream().forEach { methodCommentNode ->
 
-                templateText = templateText.replace("\${description}", if (methodCommentNode.description == null) methodCommentNode.methodName!! else methodCommentNode.description!!, false)
-                                            .replace("\${requestMethod}", if (methodCommentNode.requestMethod == null) "" else methodCommentNode.requestMethod!!, false)
-                                            .replace("\${requestUrl}", if (methodCommentNode.requestUrl == null) "" else methodCommentNode.requestUrl!!, false)
+                val methodNameOrDesc = if (methodCommentNode.description == null) methodCommentNode.methodName!! else methodCommentNode.description!!
+
+                var mdText = templateText.replace("\${description}", methodNameOrDesc, false)
+                    .replace("\${requestMethod}", if (methodCommentNode.requestMethod == null) "" else methodCommentNode.requestMethod!!, false)
+                    .replace("\${requestUrl}", if (methodCommentNode.requestUrl == null) "" else methodCommentNode.requestUrl!!, false)
 
                 var parameterText = ""
                 var insertStartIndex = -1
                 var insertEndIndex = -1
-                templateText.split("\n").parallelStream().filter { line ->
+                mdText.split("\n").parallelStream().filter { line ->
                     line.contains("\${paramName}")
                 }.findFirst().ifPresent { lineParameter ->
-                    insertStartIndex = templateText.indexOf(lineParameter)
+                    insertStartIndex = mdText.indexOf(lineParameter)
                     insertEndIndex = insertStartIndex + lineParameter.length
                     methodCommentNode.requestParameterList.parallelStream().forEachOrdered { requestParameter ->
                         parameterText += lineParameter.replace("\${paramName}", requestParameter.paramName!!, false)
-                                .replace("\${paramRequired}", requestParameter.required.toString(), false)
-                                .replace("\${paramType}", requestParameter.type!!, false)
-                                .replace("\${paramDescription}", requestParameter.paramDescription!!, false)
+                            .replace("\${paramRequired}", requestParameter.required.toString(), false)
+                            .replace("\${paramType}", requestParameter.type!!, false)
+                            .replace("\${paramDescription}", requestParameter.paramDescription!!, false)
                     }
                 }
 
                 println(parameterText)
                 if (insertStartIndex > -1) {
-                    templateText = templateText.substring(0, insertStartIndex) + parameterText + templateText.substring(insertEndIndex)
+                    mdText = mdText.substring(0, insertStartIndex) + parameterText + mdText.substring(insertEndIndex)
                 }
+
+                val pathOut = Paths.get(outDirectory, "$methodNameOrDesc.MD")
+                val file = pathOut.toFile()
+                /*if (file.exists()) {
+                    file.delete()
+                }*/
+
+                if (!file.parentFile.exists()) {
+                    file.parentFile.mkdirs()
+                }
+                file.createNewFile()
+                log.info("[dockit]Generate doc to $pathOut")
+                file.writeText(mdText)
             }
 
-            if (outDir == "DEFAULT") {
-                outDir = Paths.get(project.build.directory, "dockit").toString()
-            }
-
-            val pathOut = Paths.get(outDir, "${if (classNode.classDescription == null) classNode.className else classNode.classDescription}.MD")
-            val file = pathOut.toFile()
-            /*if (file.exists()) {
-                file.delete()
-            }*/
-
-            if (!file.parentFile.exists()) {
-                file.parentFile.mkdirs()
-            }
-            file.createNewFile()
-            log.info("[dockit]Generate doc to $pathOut")
-            file.writeText(templateText)
         }
 
     }
