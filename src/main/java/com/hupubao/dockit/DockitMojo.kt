@@ -1,7 +1,10 @@
 package com.hupubao.dockit
 
+import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.serializer.SerializerFeature
+import com.github.jsonzou.jmockdata.JMockData
 import com.hupubao.dockit.utils.CommentUtils
-import org.apache.maven.model.FileSet
+import org.apache.maven.artifact.Artifact
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
@@ -10,12 +13,24 @@ import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
 import java.io.File
+import java.net.MalformedURLException
+import java.net.URL
+import java.net.URLClassLoader
 import java.nio.charset.Charset
 import java.nio.file.Paths
+import java.util.*
+import org.apache.maven.plugin.descriptor.PluginDescriptor
+import org.codehaus.plexus.classworlds.UrlUtils.getURLs
+
+
+
+
 
 
 /**
  * @goal dockit
+ * @requiresDependencyResolution compile
+ * requiresDependencyResolution:https://maven.apache.org/developers/mojo-api-specification.html
  */
 @Mojo(name = "dockit", defaultPhase = LifecyclePhase.COMPILE)
 class DockitMojo : AbstractMojo() {
@@ -34,6 +49,9 @@ class DockitMojo : AbstractMojo() {
 
     @Parameter(defaultValue = "\${project}", required = true, readonly = true)
     lateinit var project: MavenProject
+
+    @Parameter(defaultValue = "\${plugin}", readonly = true)
+    lateinit var pluginDescriptor: PluginDescriptor
 
     @Throws(MojoExecutionException::class, MojoFailureException::class)
     override fun execute() {
@@ -83,7 +101,6 @@ class DockitMojo : AbstractMojo() {
                     }
                 }
 
-                println(parameterText)
                 if (insertStartIndex > -1) {
                     mdText = mdText.substring(0, insertStartIndex) + parameterText + mdText.substring(insertEndIndex)
                 }
@@ -103,6 +120,23 @@ class DockitMojo : AbstractMojo() {
             }
 
         }
+
+        val pluginDescriptor = pluginContext["pluginDescriptor"] as PluginDescriptor
+        // printing the ClassRealm content containing plugin classpath dependencies
+        val classRealm = pluginDescriptor.classRealm
+
+        classRealm.addURL(File(project.build.outputDirectory).toURI().toURL())
+        project.dependencyArtifacts.forEach { element -> classRealm.addURL(URL("file:$element")) }
+        for (url in classRealm.urLs) log.info(" >>> " + url.toString())
+
+        val jMockData = JMockData.mock(Class.forName("cn.lamic.chagoi.beans.sys.ResponseBean"))
+        println(JSON.toJSONString(jMockData, SerializerFeature.PrettyFormat))
+//        val projectClasspathList = ArrayList<URL>()
+//        project.dependencyArtifacts.forEach { element -> projectClasspathList.add(URL("file:$element")) }
+//        println(JSON.toJSONString(projectClasspathList))
+//        val loader = URLClassLoader(projectClasspathList.toTypedArray())
+//        val jMockData = JMockData.mock(loader.loadClass("cn.lamic.chagoi.beans.sys.ResponseBean"))
+//        println(JSON.toJSONString(jMockData, SerializerFeature.PrettyFormat))
 
     }
 

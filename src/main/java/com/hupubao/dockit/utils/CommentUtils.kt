@@ -54,34 +54,37 @@ object CommentUtils {
                                                 methodCommentNode.requestMethod = tagMethod.content.toText()
                                             }
 
-                                            if (tagMethod.type == JavadocBlockTag.Type.PARAM) {
+                                            if (tagMethod.tagName == "arg") {
 
-                                                if (!tagMethod.name.isPresent) {
+                                                if (tagMethod.content.isEmpty) {
                                                     continue
                                                 }
-                                                val nameArray: List<String> = tagMethod.name.get().split(",")
 
+                                                val argText = tagMethod.content.toText()
 
-                                                val paramName = nameArray[0]
-                                                val paramDescription = if(tagMethod.content.elements.isEmpty()) {
-                                                    paramName
-                                                } else {
-                                                    tagMethod.content.elements[0].toText()
-                                                }
+                                                val argSplitIndex = argText.indexOf(" ")
+                                                val argInfo = argText.substring(0, argSplitIndex).split(",")
+                                                val argDescription = argText.substring(argSplitIndex)
 
-                                                val paramType = if (nameArray.size > 1) {
-                                                    nameArray[1]
+                                                val argName = argInfo[0]
+
+                                                val argType = if (argInfo.size > 1) {
+                                                    argInfo[1]
                                                 } else {
                                                     "Object"
                                                 }
 
-                                                val paramRequired = if (nameArray.size > 2) {
-                                                    nameArray[2] == "required"
+                                                val argRequired = if (argInfo.size > 2) {
+                                                    argInfo[2] == "required"
                                                 } else {
                                                     false
                                                 }
 
-                                                methodCommentNode.requestParameterList.add(com.hupubao.dockit.entity.Parameter(paramName, paramDescription, paramRequired, paramType))
+                                                methodCommentNode.requestParameterList.add(com.hupubao.dockit.entity.Parameter(argName, argDescription, argRequired, argType))
+                                            }
+
+                                            if (tagMethod.type == JavadocBlockTag.Type.RETURN) {
+
                                             }
 
                                         }

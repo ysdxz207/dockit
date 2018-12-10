@@ -1,11 +1,16 @@
 package com.hupubao.dockit.utils
 
+import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.serializer.SerializerFeature
 import com.github.javaparser.ParseResult
 import com.github.javaparser.ast.CompilationUnit
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.javadoc.JavadocBlockTag
+import com.github.javaparser.javadoc.description.JavadocDescriptionElement
+import com.github.javaparser.javadoc.description.JavadocInlineTag
 import com.github.javaparser.utils.ParserCollectionStrategy
 import com.github.javaparser.utils.SourceRoot
+import com.github.jsonzou.jmockdata.JMockData
 import com.hupubao.dockit.entity.ClassNode
 import com.hupubao.dockit.entity.MethodCommentNode
 import java.nio.file.Paths
@@ -13,7 +18,7 @@ import java.nio.file.Paths
 fun main(args: Array<String>) {
     val classNodeList: MutableList<ClassNode> = mutableListOf()
 
-    val it = "D://workspace/idea/hupubao/src/main/java"
+    val it = "D://workspace/idea/chagoi/chagoi-web/src/main/java"
     val projectRoot = ParserCollectionStrategy().collect(Paths.get(it.toString()))
     val sourceRoot = SourceRoot(projectRoot.root)
 
@@ -53,34 +58,47 @@ fun main(args: Array<String>) {
                                         methodCommentNode.requestMethod = tagMethod.content.toText()
                                     }
 
-                                    if (tagMethod.type == JavadocBlockTag.Type.PARAM) {
+                                    if (tagMethod.tagName == "arg") {
 
-                                        if (!tagMethod.name.isPresent) {
+                                        if (tagMethod.content.isEmpty) {
                                             continue
                                         }
-                                        val nameArray: List<String> = tagMethod.name.get().split(",")
 
+                                        val argText = tagMethod.content.toText()
 
-                                        val paramName = nameArray[0]
-                                        val paramDescription = if(tagMethod.content.elements.isEmpty()) {
-                                            paramName
-                                        } else {
-                                            tagMethod.content.elements[0].toText()
-                                        }
+                                        val argSplitIndex = argText.indexOf(" ")
+                                        val argInfo = argText.substring(0, argSplitIndex).split(",")
+                                        val argDescription = argText.substring(argSplitIndex)
 
-                                        val paramType = if (nameArray.size > 1) {
-                                            nameArray[1]
+                                        val argName = argInfo[0]
+
+                                        val argType = if (argInfo.size > 1) {
+                                            argInfo[1]
                                         } else {
                                             "Object"
                                         }
 
-                                        val paramRequired = if (nameArray.size > 2) {
-                                            nameArray[2] == "required"
+                                        val argRequired = if (argInfo.size > 2) {
+                                            argInfo[2] == "required"
                                         } else {
                                             false
                                         }
 
-                                        methodCommentNode.requestParameterList.add(com.hupubao.dockit.entity.Parameter(paramName, paramDescription, paramRequired, paramType))
+                                        methodCommentNode.requestParameterList.add(com.hupubao.dockit.entity.Parameter(argName, argDescription, argRequired, argType))
+                                    }
+
+                                    if (tagMethod.type == JavadocBlockTag.Type.RETURN) {
+                                        if (!tagMethod.content.isEmpty) {
+                                            val linkTypeStream = tagMethod.content.elements.stream().filter { javadocDescriptionElement ->
+                                                javadocDescriptionElement is JavadocInlineTag && javadocDescriptionElement.type == JavadocInlineTag.Type.LINK
+                                            }.findFirst()
+
+                                           if (linkTypeStream.isPresent) {
+                                               val linkTypeTag = linkTypeStream.get() as JavadocInlineTag
+                                               val jMockData = JMockData.mock(Class.forName(linkTypeTag.content))
+                                               println(JSON.toJSONString(jMockData, SerializerFeature.PrettyFormat))
+                                           }
+                                        }
                                     }
 
                                 }
@@ -98,5 +116,6 @@ fun main(args: Array<String>) {
         }
 
     }
+
     println(classNodeList)
 }
