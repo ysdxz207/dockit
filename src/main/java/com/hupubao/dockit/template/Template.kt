@@ -2,10 +2,9 @@ package com.hupubao.dockit.template
 
 import com.hupubao.dockit.entity.Argument
 import com.hupubao.dockit.enums.HttpMethod
-import com.hupubao.dockit.resolver.template.DescriptionResolver
-import com.hupubao.dockit.resolver.template.TitleResolver
-import org.commonmark.node.Node
-import org.commonmark.parser.Parser
+import com.hupubao.dockit.resolver.template.PlaceholderResolver
+import com.vladsch.flexmark.ast.Node
+import com.vladsch.flexmark.parser.Parser
 
 open class Template {
     var source: String = ""
@@ -20,18 +19,20 @@ open class Template {
     var resSample: String = ""
     var remark: String? = null
 
+    constructor()
+
 
     constructor(source: String) {
         this.source = source
         this.resolve()
     }
 
+
     fun resolve() {
         document = Parser.builder().build().parse(source)
     }
     fun render(): String {
-        TitleResolver.resolve(document, title)
-        DescriptionResolver.resolve(document, descriptionList)
-
+        PlaceholderResolver.resolve(document, "", title)
+        return document.toString()
     }
 }
