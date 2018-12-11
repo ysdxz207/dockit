@@ -4,10 +4,13 @@ class MethodCommentNode {
 
 
     var methodName: String? = null
-    var description: String? = null
+    var title: String? = null
+    var descriptionList: MutableList<String> = mutableListOf()
     var requestUrl: String? = null
     var requestMethod: String? = null
-    var requestParameterList: MutableList<Parameter> = mutableListOf()
-    var responseParameterList: MutableList<Parameter> = mutableListOf()
+    var requestArgList: MutableList<Argument> = mutableListOf()
+    var responseArgList: MutableList<Argument> = mutableListOf()
+    var responseObjectClassName: String? = null
+
 
 }

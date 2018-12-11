@@ -1,4 +1,4 @@
-
+### ${title}
     
 **描述** 
 
@@ -14,7 +14,7 @@
 
 |参数名|必选|类型|说明|
 |:----    |:---|:----- |-----   |
-|${paramName} |${paramRequired}  |${paramType} |${paramDescription}   |
+|${argName} |${argRequired}  |${argType} |${argDescription}   |
 
 
 
@@ -38,3 +38,5 @@
 |参数名|类型|说明|
 |:-----  |:-----|-----                           |
 |userId |Integer   |用户ID  |
+
+

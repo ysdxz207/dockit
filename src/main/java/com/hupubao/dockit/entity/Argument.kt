@@ -1,6 +1,6 @@
 package com.hupubao.dockit.entity
 
-class Parameter {
+class Argument {
 
     var paramName: String? = null
     var paramDescription: String? = null
