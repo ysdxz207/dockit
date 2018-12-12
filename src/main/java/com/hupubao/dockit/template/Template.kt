@@ -1,12 +1,11 @@
 package com.hupubao.dockit.template
 
 import com.hupubao.dockit.entity.Argument
-import com.hupubao.dockit.entity.ClassNode
+import com.hupubao.dockit.entity.MethodCommentNode
 import com.hupubao.dockit.enums.HttpMethod
 import com.hupubao.dockit.resolver.template.PlaceholderResolver
 import com.vladsch.flexmark.ast.Node
 import com.vladsch.flexmark.parser.Parser
-import java.lang.StringBuilder
 import kotlin.reflect.full.memberProperties
 
 open class Template {
@@ -16,7 +15,7 @@ open class Template {
     var title: String = ""
     var descriptionList: MutableList<String> = mutableListOf()
     var requestUrl: String = ""
-    var requestMethod: Array<HttpMethod> = emptyArray()
+    var requestMethod: String = ""
     var argList: MutableList<Argument> = mutableListOf()
     var resArgList: MutableList<Argument> = mutableListOf()
     var resSample: String = ""
@@ -25,9 +24,14 @@ open class Template {
     constructor()
 
 
-    constructor(source: String, classNode: ClassNode) {
+    constructor(source: String, methodCommentNode: MethodCommentNode) {
         this.source = source
-        this.title = if (classNode.classDescription == null) classNode.className!! else classNode.classDescription!!
+        this.title = if (methodCommentNode.title == null) methodCommentNode.methodName!! else methodCommentNode.title!!
+        this.descriptionList = methodCommentNode.descriptionList
+        this.requestUrl = methodCommentNode.requestUrl
+        this.requestMethod = methodCommentNode.requestMethod
+        this.argList = methodCommentNode.requestArgList
+        this.resArgList = methodCommentNode.responseArgList
 
         this.parse()
     }
@@ -38,7 +42,12 @@ open class Template {
     }
     fun render(): String {
         this::class.memberProperties.forEach { field ->
-            PlaceholderResolver.resolve(document, field.name, field.getter.call(this))
+            var property = field.name
+            val value = field.getter.call(this) ?: return@forEach
+            if (value is Iterable<*>) {
+                property = property.replace("List", "")
+            }
+            PlaceholderResolver.resolve(document, property, value)
         }
 
         val sb = StringBuilder()
@@ -46,7 +55,6 @@ open class Template {
             sb.append(it.chars).append("\r\n")
         }
 
-        println(document.chars)
         return sb.toString()
     }
 }

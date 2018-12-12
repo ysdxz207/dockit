@@ -1,10 +1,12 @@
 package com.hupubao.dockit.resolver.template
 
-import com.hupubao.dockit.entity.ClassNode
+import com.hupubao.dockit.entity.Argument
+import com.hupubao.dockit.entity.MethodCommentNode
 import com.hupubao.dockit.template.MarkdownTemplate
+import com.vladsch.flexmark.ast.BulletList
 import com.vladsch.flexmark.ast.Node
-import com.vladsch.flexmark.parser.Parser
 import java.nio.charset.Charset
+import kotlin.reflect.full.memberProperties
 
 
 object PlaceholderResolver {
@@ -26,21 +28,37 @@ object PlaceholderResolver {
         }
     }
 
-    fun resolve(document: Node, property: String, value: Any?) {
+    fun resolve(document: Node, property: String, value: Any) {
 
-        if (value == null) {
-            return
-        }
         val placeholder = "\${$property}"
         document.children.map { node ->
             if (node.chars.contains(placeholder)) {
                 if (isSimpleType(value::class.java)) {
                     if (node != null) {
-                        node.chars = node.chars.replace(placeholder, value.toString())
+                        var charsWithValue = node.chars.replace(placeholder, value.toString())
+                        charsWithValue =
+                                if (charsWithValue.endsWith("\n") || charsWithValue.endsWith("\r\n")) charsWithValue else charsWithValue.append(
+                                    "\r\n"
+                                )
+                        node.chars = charsWithValue
                     }
                 } else if (value is Iterable<*>) {
                     // list
-
+                    value.forEach {  v ->
+                        if (v == null) {
+                            return@forEach
+                        }
+                        if (isSimpleType(v::class.java)) {
+                            val newNode = BulletList()
+                            newNode.chars = node.chars.replace(placeholder, v.toString())
+                            node.insertBefore(newNode)
+                        } else {
+                            v::class.memberProperties.forEach {
+                                println(node.chars)
+                            }
+                        }
+                    }
+                    node.unlink()
                 } else {
                     // unsupported
                 }
@@ -54,8 +72,15 @@ object PlaceholderResolver {
     fun main(args: Array<String>) {
         val text = javaClass.getResource("/template/DEFAULT.MD").readText(Charset.forName("UTF-8"))
 
-        val classNode = ClassNode()
-        classNode.classDescription = "大表哥"
-        MarkdownTemplate(text, classNode).render()
+        val methodCommentNode = MethodCommentNode()
+        methodCommentNode.title = "大表哥"
+        methodCommentNode.descriptionList.add("描述1")
+        methodCommentNode.descriptionList.add("描述2")
+        methodCommentNode.descriptionList.add("描述3")
+        methodCommentNode.descriptionList.add("描述4")
+        methodCommentNode.requestUrl = "/api"
+        methodCommentNode.requestMethod = "GET,POST"
+        methodCommentNode.requestArgList.add(Argument("page", "页码", true, "Integer"))
+        println(MarkdownTemplate(text, methodCommentNode).render())
     }
 }
