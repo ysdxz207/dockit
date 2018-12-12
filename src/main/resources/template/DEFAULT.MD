@@ -1,5 +1,5 @@
 ### ${title}
-    
+
 **描述** 
 
 - ${description}
@@ -15,8 +15,6 @@
 |参数名|必选|类型|说明|
 |:----    |:---|:----- |-----   |
 |${argName} |${argRequired}  |${argType} |${argDescription}   |
-
-
 
 **返回示例**
 
