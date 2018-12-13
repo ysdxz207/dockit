@@ -14,7 +14,7 @@
 
 |参数名|必选|类型|说明|
 |:----    |:---|:----- |-----   |
-|${argName} |${argRequired}  |${argType} |${argDescription}   |
+|${arg.name} |${arg.required}  |${arg.type} |${arg.description}   |
 
 **返回示例**
 

@@ -91,10 +91,10 @@ class DockitMojo : AbstractMojo() {
                     insertStartIndex = mdText.indexOf(lineParameter)
                     insertEndIndex = insertStartIndex + lineParameter.length
                     methodCommentNode.requestArgList.parallelStream().forEachOrdered { requestParameter ->
-                        parameterText += lineParameter.replace("\${paramName}", requestParameter.paramName!!, false)
+                        parameterText += lineParameter.replace("\${paramName}", requestParameter.name!!, false)
                             .replace("\${argRequired}", requestParameter.required.toString(), false)
                             .replace("\${argType}", requestParameter.type!!, false)
-                            .replace("\${argDescription}", requestParameter.paramDescription!!, false)
+                            .replace("\${argDescription}", requestParameter.description!!, false)
                     }
                 }
 
