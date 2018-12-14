@@ -1,14 +1,10 @@
 package com.hupubao.dockit.parser
 
-import com.alibaba.fastjson.JSON
-import com.alibaba.fastjson.serializer.SerializerFeature
 import com.github.javaparser.ast.Node
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.javadoc.JavadocBlockTag
 import com.github.javaparser.javadoc.description.JavadocInlineTag
-import com.github.jsonzou.jmockdata.JMockData
 import com.hupubao.dockit.entity.MethodCommentNode
-import com.hupubao.dockit.utils.ProjectUtils
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.project.MavenProject
 import java.util.*
@@ -58,9 +54,9 @@ open class MethodCommentParser {
                 }
 
                 val argRequired = if (argInfo.size > 2) {
-                    argInfo[2].trim() == "required"
+                    argInfo[2].trim().replace("required=", "")
                 } else {
-                    false
+                    "No"
                 }
 
                 methodCommentNode.requestArgList.add(

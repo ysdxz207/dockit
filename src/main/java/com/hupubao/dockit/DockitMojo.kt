@@ -1,6 +1,7 @@
 package com.hupubao.dockit
 
 import com.hupubao.dockit.parser.CommentParser
+import com.hupubao.dockit.template.MarkdownTemplate
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
@@ -70,38 +71,7 @@ class DockitMojo : AbstractMojo() {
                 val methodNameOrTitle =
                     if (methodCommentNode.title == null) methodCommentNode.methodName!! else methodCommentNode.title!!
 
-                var mdText = templateText.replace("\${title}", methodNameOrTitle, false)
-                    .replace(
-                        "\${requestMethod}",
-                        if (methodCommentNode.requestMethod == null) "" else methodCommentNode.requestMethod!!,
-                        false
-                    )
-                    .replace(
-                        "\${requestUrl}",
-                        if (methodCommentNode.requestUrl == null) "" else methodCommentNode.requestUrl!!,
-                        false
-                    )
-
-                var parameterText = ""
-                var insertStartIndex = -1
-                var insertEndIndex = -1
-                mdText.split("\n").parallelStream().filter { line ->
-                    line.contains("\${argName}")
-                }.findFirst().ifPresent { lineParameter ->
-                    insertStartIndex = mdText.indexOf(lineParameter)
-                    insertEndIndex = insertStartIndex + lineParameter.length
-                    methodCommentNode.requestArgList.parallelStream().forEachOrdered { requestParameter ->
-                        parameterText += lineParameter.replace("\${paramName}", requestParameter.name!!, false)
-                            .replace("\${argRequired}", requestParameter.required.toString(), false)
-                            .replace("\${argType}", requestParameter.type!!, false)
-                            .replace("\${argDescription}", requestParameter.description!!, false)
-                    }
-                }
-
-                if (insertStartIndex > -1) {
-                    mdText = mdText.substring(0, insertStartIndex) + parameterText + mdText.substring(insertEndIndex)
-                }
-
+                val mdText = MarkdownTemplate(templateText, methodCommentNode).render()
                 val pathOut = Paths.get(outDirectory, "$methodNameOrTitle.MD")
                 val file = pathOut.toFile()
                 /*if (file.exists()) {
