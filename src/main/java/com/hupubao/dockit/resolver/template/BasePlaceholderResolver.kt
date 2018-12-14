@@ -38,11 +38,7 @@ open class BasePlaceholderResolver {
             if (propertyValue != null) {
                 value = propertyValue.toString()
             }
-            val charsWithValue = node.chars.replace("\${$placeholderUndressed}", value)
-            if (!charsWithValue.endsWith(BasedSequence.EOL)) {
-                charsWithValue.append(BasedSequence.EOL_CHARS)
-            }
-            node.chars = charsWithValue
+            node.chars = node.chars.replace("\${$placeholderUndressed}", value)
 
         }
 
@@ -83,7 +79,11 @@ open class BasePlaceholderResolver {
                                 return@forEach
                             }
                             val newText = Text()
-                            newText.chars = tableItemText.chars.replace("${annotation.value}.", "")
+                            val newTextChars = StringBuilder(tableItemText.chars.replace("${annotation.value}.", ""))
+                            if (!newTextChars.endsWith(BasedSequence.EOL)) {
+                                newTextChars.append(BasedSequence.EOL_CHARS)
+                            }
+                            newText.chars = SubSequence.of(newTextChars)
                             tableItemText.insertBefore(newText)
                             for (p in argument::class.memberProperties) {
                                 resolveSimpleValue(newText, mutableListOf(p.name), p.getter.call(argument))
@@ -116,7 +116,8 @@ open class BasePlaceholderResolver {
             if (parent != null) {
                 val nodeChars = StringBuilder()
                 parent.children.forEach { child ->
-                    nodeChars.append(child.chars).append(BasedSequence.EOL_CHARS)
+
+                    nodeChars.append(child.chars)
                 }
                 parent.chars = SubSequence.of(nodeChars)
             }
