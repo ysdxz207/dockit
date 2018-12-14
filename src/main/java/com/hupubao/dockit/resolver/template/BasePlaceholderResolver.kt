@@ -30,38 +30,46 @@ open class BasePlaceholderResolver {
         }
     }
 
-    private fun resolveSimpleValue(node: Node, placeholderUndressed: String, propertyValue: Any?) {
-        var value = ""
-        if (propertyValue != null) {
-            value = propertyValue.toString()
+    private fun resolveSimpleValue(node: Node, placeholderArr: List<String>, propertyValue: Any?) {
+
+        for (placeholder in placeholderArr) {
+            val placeholderUndressed = undressPlaceholder(placeholder)
+            var value = ""
+            if (propertyValue != null) {
+                value = propertyValue.toString()
+            }
+            val charsWithValue = node.chars.replace("\${$placeholderUndressed}", value)
+            if (!charsWithValue.endsWith(BasedSequence.EOL)) {
+                charsWithValue.append(BasedSequence.EOL_CHARS)
+            }
+            node.chars = charsWithValue
+
         }
-        val charsWithValue = node.chars.replace("\${$placeholderUndressed}", value)
-        if (!charsWithValue.endsWith(BasedSequence.EOL)) {
-            charsWithValue.append(BasedSequence.EOL_CHARS)
-        }
-        node.chars = charsWithValue
+
     }
 
-    fun resolve(node: Node, placeholder: String, templateValue: Any) {
+    fun resolve(node: Node, placeholderList: List<String>, templateValue: Any) {
 
-        val placeholderUndressed = placeholder.replace("\${", "")
-            .replace("}", "")
+        val nodesToUnlink = mutableListOf<Node>()
+
         if (isSimpleType(templateValue::class.java)) {
-            resolveSimpleValue(node, placeholderUndressed, templateValue)
+            resolveSimpleValue(node, placeholderList, templateValue)
             return
         }
         for (property in templateValue::class.memberProperties) {
-            val placeholderArray = placeholderUndressed.split(".")
+
+            val placeholder = placeholderList.find { placeholder ->
+                val annotation = property.javaField?.getAnnotation(Placeholder::class.java)
+                annotation?.value == undressPlaceholder(placeholder).split(".")[0]
+            } ?: continue
+
+            val placeholderArray = undressPlaceholder(placeholder).split(".")
             val isCorrectListPlaceholder = placeholderArray.size > 1
-            val field = property.javaField ?: continue
-            val annotation = field.getAnnotation(Placeholder::class.java) ?: continue
-            if (annotation.value != placeholderArray[0]) {
-                continue
-            }
+            val annotation = property.javaField!!.getAnnotation(Placeholder::class.java) ?: continue
             val propertyValue = property.getter.call(templateValue)
 
             if (annotation.type == PlaceholderType.SIMPLE) {
-                resolveSimpleValue(node, placeholderUndressed, propertyValue)
+                resolveSimpleValue(node, placeholderArray, propertyValue)
                 continue
             }
 
@@ -69,34 +77,55 @@ open class BasePlaceholderResolver {
 
                 if (propertyValue is Iterable<*>) {
                     if (node is Paragraph) {
-                        val tableItemText = node.children.last()
+                        val tableItemText = node.lastChild
                         propertyValue.forEach { argument ->
                             if (argument == null) {
                                 return@forEach
                             }
                             val newText = Text()
                             newText.chars = tableItemText.chars.replace("${annotation.value}.", "")
-                            for (p in argument::class.memberProperties) {
-                                resolveSimpleValue(newText, p.name, p.getter.call(argument))
-                            }
                             tableItemText.insertBefore(newText)
+                            for (p in argument::class.memberProperties) {
+                                resolveSimpleValue(newText, mutableListOf(p.name), p.getter.call(argument))
+                            }
                         }
-
+                        if (!nodesToUnlink.contains(tableItemText)) {
+                            nodesToUnlink.add(tableItemText)
+                        }
                     } else {
 
                         propertyValue.forEach { f ->
                             val newNode = BulletList()
                             newNode.chars = node.chars
-                            resolve(newNode, if (isCorrectListPlaceholder) placeholderArray[1] else placeholderArray[0], f ?: "")
                             node.insertBefore(newNode)
+                            resolveSimpleValue(newNode, if (isCorrectListPlaceholder) mutableListOf(placeholderArray[1]) else mutableListOf(placeholderArray[0]), f ?: "")
+                        }
+                        if (!nodesToUnlink.contains(node)) {
+                            nodesToUnlink.add(node)
                         }
                     }
                 } else {
-                    resolveSimpleValue(node, placeholderUndressed, propertyValue)
+                    resolveSimpleValue(node, placeholderArray, propertyValue)
                 }
             }
-
         }
 
+        nodesToUnlink.forEach { n ->
+            val parent = n.parent
+            n.unlink()
+            if (parent != null) {
+                val nodeChars = StringBuilder()
+                parent.children.forEach { child ->
+                    nodeChars.append(child.chars).append(BasedSequence.EOL_CHARS)
+                }
+                parent.chars = SubSequence.of(nodeChars)
+            }
+        }
+
+    }
+
+    private fun undressPlaceholder(placeholder: String): String {
+        return placeholder.replace("\${", "")
+            .replace("}", "")
     }
 }

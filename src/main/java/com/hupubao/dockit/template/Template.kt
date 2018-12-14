@@ -57,17 +57,17 @@ open class Template {
             }
 
             if (matchResult.count() == 1) {
-                PlaceholderResolver.resolve(node, matchResult.single().value, this)
+                PlaceholderResolver.resolve(node, mutableListOf(matchResult.single().value), this)
             } else {
+                val arr = mutableListOf<String>()
                 matchResult.forEach { p ->
-                    PlaceholderResolver.resolve(node, p.value, this)
+                    arr.add(p.value)
                 }
+                PlaceholderResolver.resolve(node, arr, this)
             }
         }
     }
     fun render(): String {
-
-        rebuildDocumentChars()
 
         val sb = StringBuilder()
         for (node in document.children) {
@@ -75,37 +75,5 @@ open class Template {
         }
 
         return sb.toString()
-    }
-
-
-
-    private fun rebuildDocumentChars() {
-        rebuildNodeChars(getLastLevelNode())
-    }
-
-    private fun getLastLevelNode(): Node {
-        return getOneChildNode(document)
-    }
-
-    private fun getOneChildNode(node: Node): Node {
-        for (n in node.children) {
-            return if (n.hasChildren()) {
-                n.children.for
-            } else {
-                node
-            }
-        }
-        return node
-    }
-
-    private fun rebuildNodeChars(childNode: Node) {
-
-        if (childNode.parent != null && childNode.parent is Paragraph) {
-            val sb = StringBuffer()
-            childNode.parent.children.forEach { child ->
-                sb.append(child.chars)
-            }
-            childNode.parent.chars = SubSequence.of(sb.toString())
-        }
     }
 }

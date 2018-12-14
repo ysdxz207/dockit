@@ -23,6 +23,7 @@ object PlaceholderResolver : BasePlaceholderResolver(){
         methodCommentNode.requestUrl = "/api"
         methodCommentNode.requestMethod = "GET,POST"
         methodCommentNode.requestArgList.add(Argument("page", "页码", true, "Integer"))
+        methodCommentNode.requestArgList.add(Argument("pageSize", "分页大小", true, "Integer"))
         println(MarkdownTemplate(text, methodCommentNode).render())
     }
 }
