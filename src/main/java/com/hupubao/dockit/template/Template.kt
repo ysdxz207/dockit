@@ -5,7 +5,6 @@ import com.hupubao.dockit.entity.Argument
 import com.hupubao.dockit.entity.MethodCommentNode
 import com.hupubao.dockit.enums.PlaceholderType
 import com.hupubao.dockit.resolver.template.PlaceholderResolver
-import com.hupubao.dockit.resolver.template.TestPlaceholderResolver
 import com.vladsch.flexmark.ast.Node
 import com.vladsch.flexmark.parser.Parser
 import com.vladsch.flexmark.util.sequence.BasedSequence
