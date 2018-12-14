@@ -73,24 +73,15 @@ object PlaceholderResolver {
 
                 if (propertyValue is Iterable<*>) {
                     if (node is Paragraph) {
-                        val tableItemText = node.lastChild
+                        val tableItem = node.lastChild
                         propertyValue.forEach { argument ->
                             if (argument == null) {
                                 return@forEach
                             }
-                            val newText = Text()
-                            val newTextChars = StringBuilder(tableItemText.chars.replace("${annotation.value}.", ""))
-                            if (!newTextChars.endsWith(BasedSequence.EOL)) {
-                                newTextChars.append(BasedSequence.EOL_CHARS)
-                            }
-                            newText.chars = SubSequence.of(newTextChars)
-                            tableItemText.insertBefore(newText)
-                            for (p in argument::class.memberProperties) {
-                                resolveSimpleValue(newText, mutableListOf(p.name), p.getter.call(argument))
-                            }
+                            resolveTableItem(tableItem, annotation.value, argument)
                         }
-                        if (!nodesToUnlink.contains(tableItemText)) {
-                            nodesToUnlink.add(tableItemText)
+                        if (!nodesToUnlink.contains(tableItem)) {
+                            nodesToUnlink.add(tableItem)
                         }
                     } else {
 
@@ -98,7 +89,13 @@ object PlaceholderResolver {
                             val newNode = BulletList()
                             newNode.chars = node.chars
                             node.insertBefore(newNode)
-                            resolveSimpleValue(newNode, if (isCorrectListPlaceholder) mutableListOf(placeholderArray[1]) else mutableListOf(placeholderArray[0]), f ?: "")
+                            resolveSimpleValue(
+                                newNode,
+                                if (isCorrectListPlaceholder) mutableListOf(placeholderArray[1]) else mutableListOf(
+                                    placeholderArray[0]
+                                ),
+                                f ?: ""
+                            )
                         }
                         if (!nodesToUnlink.contains(node)) {
                             nodesToUnlink.add(node)
@@ -110,6 +107,25 @@ object PlaceholderResolver {
             }
         }
 
+        unlinkNodes(nodesToUnlink)
+
+    }
+
+    private fun resolveTableItem(tableItem: Node, tablePlaceholderPrefix: String, argument: Any) {
+
+        val newText = Text()
+        val newTextChars = StringBuilder(tableItem.chars.replace("$tablePlaceholderPrefix.", ""))
+        if (!newTextChars.endsWith(BasedSequence.EOL)) {
+            newTextChars.append(BasedSequence.EOL_CHARS)
+        }
+        newText.chars = SubSequence.of(newTextChars)
+        tableItem.insertBefore(newText)
+        for (p in argument::class.memberProperties) {
+            resolveSimpleValue(newText, mutableListOf(p.name), p.getter.call(argument))
+        }
+    }
+
+    private fun unlinkNodes(nodesToUnlink: List<Node>) {
         nodesToUnlink.forEach { n ->
             val parent = n.parent
             n.unlink()
@@ -122,7 +138,6 @@ object PlaceholderResolver {
                 parent.chars = SubSequence.of(nodeChars)
             }
         }
-
     }
 
     private fun undressPlaceholder(placeholder: String): String {

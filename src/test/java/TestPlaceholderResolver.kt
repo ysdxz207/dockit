@@ -1,17 +1,16 @@
-package com.hupubao.dockit.resolver.template
-
 import com.hupubao.dockit.entity.Argument
 import com.hupubao.dockit.entity.MethodCommentNode
 import com.hupubao.dockit.template.MarkdownTemplate
+import org.junit.Test
 import java.nio.charset.Charset
 
 
-object TestPlaceholderResolver {
+class TestPlaceholderResolver {
 
 
 
-    @JvmStatic
-    fun main(args: Array<String>) {
+    @Test
+    fun test() {
         val text = javaClass.getResource("/template/DEFAULT.MD").readText(Charset.forName("UTF-8"))
 
         val methodCommentNode = MethodCommentNode()
