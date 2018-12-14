@@ -51,9 +51,6 @@ class DockitMojo : AbstractMojo() {
         val templateText = DockitMojo::class.java.getResource(template).readText(Charset.forName(templateCharset))
 
         val classNodeList = CommentParser.parseComments(project, log)
-        val loader = URLClassLoader(project.compileClasspathElements.map { element -> File(element.toString()).toURI().toURL() }.toTypedArray())
-
-        println("load:" + loader.loadClass("cn.lamic.chagoi.beans.sys.ResponseBean"))
 
         if (outDir == "DEFAULT") {
             outDir = Paths.get(project.build.directory, "dockit").toString()
