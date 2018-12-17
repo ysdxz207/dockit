@@ -10,8 +10,6 @@ import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
 import org.apache.maven.project.MavenProject
-import java.io.File
-import java.net.URLClassLoader
 import java.nio.charset.Charset
 import java.nio.file.Paths
 
@@ -68,7 +66,7 @@ class DockitMojo : AbstractMojo() {
                 val methodNameOrTitle =
                     if (methodCommentNode.title == null) methodCommentNode.methodName!! else methodCommentNode.title!!
 
-                val mdText = MarkdownTemplate(templateText, methodCommentNode).render()
+                val mdText = MarkdownTemplate(project, log, templateText, methodCommentNode).render()
                 val pathOut = Paths.get(outDirectory, "$methodNameOrTitle.MD")
                 val file = pathOut.toFile()
                 /*if (file.exists()) {

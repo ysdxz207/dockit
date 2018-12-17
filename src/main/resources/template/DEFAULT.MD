@@ -19,16 +19,7 @@
 **返回示例**
 
 ``` 
-  {
-    "responseCode": "SUCCESS",
-    "responseMsg": "成功",
-    "data": {
-      "userId": "12345",
-      "username": "feixiangdeyun",
-      "name": "李飞翔",
-      "lastLoginTime": "2018-12-08 23:43:29",
-    }
-  }
+  ${resSample}
 ```
 
  **返回参数** 

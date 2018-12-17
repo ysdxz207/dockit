@@ -4,7 +4,7 @@ import org.junit.Test;
 
 public class TestJMock {
 
-    @Test
+//    @Test
     public void test() {
         MockConfig mockConfig = new MockConfig()
                 // 全局配置

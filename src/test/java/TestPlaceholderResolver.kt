@@ -9,7 +9,7 @@ class TestPlaceholderResolver {
 
 
 
-    @Test
+//    @Test
     fun test() {
         val text = javaClass.getResource("/template/DEFAULT.MD").readText(Charset.forName("UTF-8"))
 
@@ -23,6 +23,6 @@ class TestPlaceholderResolver {
         methodCommentNode.requestMethod = "GET,POST"
         methodCommentNode.requestArgList.add(Argument("page", "页码", "是", "Integer"))
         methodCommentNode.requestArgList.add(Argument("pageSize", "分页大小", "否", "Integer"))
-        println(MarkdownTemplate(text, methodCommentNode).render())
+//        println(MarkdownTemplate(text, methodCommentNode).render())
     }
 }
