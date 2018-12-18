@@ -1,6 +1,7 @@
 package com.hupubao.dockit.template
 
 import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.JSONObject
 import com.alibaba.fastjson.serializer.SerializerFeature
 import com.github.jsonzou.jmockdata.JMockData
 import com.hupubao.dockit.annotation.Placeholder
@@ -93,6 +94,23 @@ open class Template(project: MavenProject, log: Log, var source: String, methodC
         return result
     }
 
+    private fun mockData(resArgList: List<Argument>): String {
+        val data = JSONObject()
+        resArgList.forEach { argument ->
+            val typeOptional = ProjectUtils.loadClass(project!!, log!!, argument.type!!)
+
+            var value: Any = JMockData.mock(String::class.java)
+            typeOptional.ifPresent { type ->
+                value = JMockData.mock(type)
+            }
+            data[argument.name] = value
+        }
+        return JSON.toJSONString(data, SerializerFeature.PrettyFormat)
+    }
+
+    /**
+     * todo
+     */
     private fun mockData(clazz: Class<*>): String {
         val data = if (clazz.newInstance() is Iterable<*>) {
             mutableListOf(clazz)
