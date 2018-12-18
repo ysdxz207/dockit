@@ -11,8 +11,8 @@ object TemplatePlaceholder {
     const val resSample = "resSample"
     const val remark = "remark"
 
-    const val argumentName = "name"
-    const val argumentDescription = "description"
-    const val argumentRequired = "required"
-    const val argumentType = "type"
+    const val ARGUMENT_NAME = "name"
+    const val ARGUMENT_DESCRIPTION = "description"
+    const val ARGUMENT_REQUIRED = "required"
+    const val ARGUMENT_TYPE = "type"
 }

@@ -5,13 +5,13 @@ import com.hupubao.dockit.constants.TemplatePlaceholder
 
 class Argument {
 
-    @Placeholder(TemplatePlaceholder.argumentName)
+    @Placeholder(TemplatePlaceholder.ARGUMENT_NAME)
     var name: String? = null
-    @Placeholder(TemplatePlaceholder.argumentDescription)
+    @Placeholder(TemplatePlaceholder.ARGUMENT_DESCRIPTION)
     var description: String? = null
-    @Placeholder(TemplatePlaceholder.argumentRequired)
+    @Placeholder(TemplatePlaceholder.ARGUMENT_REQUIRED)
     var required: String? = "Yes"
-    @Placeholder(TemplatePlaceholder.argumentType)
+    @Placeholder(TemplatePlaceholder.ARGUMENT_TYPE)
     var type: String? = null
 
     constructor(name: String?, description: String?, required: String?, type: String?) {
