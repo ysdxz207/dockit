@@ -2,13 +2,13 @@
     
 **描述** 
 
-- ${description}
+- ${desc}
 
 **请求URL** 
-> ` ${requestUrl}`
+> ` ${url}`
   
 **请求方式**
-> ${requestMethod}
+> ${method}
 
 **参数** 
 
@@ -22,10 +22,12 @@
   ${resSample}
 ```
 
- **返回参数** 
+**返回参数** 
 
 |参数名|类型|说明|
 |:-----  |:-----|-----                           |
 |userId |Integer   |用户ID  |
 
+**备注**
 
+- ${remark}

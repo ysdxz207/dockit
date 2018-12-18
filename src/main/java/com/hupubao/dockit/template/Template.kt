@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.serializer.SerializerFeature
 import com.github.jsonzou.jmockdata.JMockData
 import com.hupubao.dockit.annotation.Placeholder
+import com.hupubao.dockit.constants.TemplatePlaceholder
 import com.hupubao.dockit.entity.Argument
 import com.hupubao.dockit.entity.MethodCommentNode
 import com.hupubao.dockit.enums.PlaceholderType
@@ -18,21 +19,21 @@ import org.apache.maven.project.MavenProject
 open class Template(project: MavenProject, log: Log, var source: String, methodCommentNode: MethodCommentNode) {
     lateinit var document: Node
 
-    @Placeholder("title")
+    @Placeholder(TemplatePlaceholder.title)
     var title: String = ""
-    @Placeholder("description", type = PlaceholderType.LIST)
+    @Placeholder(TemplatePlaceholder.desc, type = PlaceholderType.LIST)
     var descriptionList: MutableList<String> = mutableListOf()
-    @Placeholder("requestUrl")
+    @Placeholder(TemplatePlaceholder.url)
     var requestUrl: String = ""
-    @Placeholder("requestMethod")
+    @Placeholder(TemplatePlaceholder.method)
     var requestMethod: String = ""
-    @Placeholder("arg", type = PlaceholderType.LIST)
+    @Placeholder(TemplatePlaceholder.arg, type = PlaceholderType.LIST)
     var argList: MutableList<Argument> = mutableListOf()
-    @Placeholder("resArg", type = PlaceholderType.LIST)
+    @Placeholder(TemplatePlaceholder.resArg, type = PlaceholderType.LIST)
     var resArgList: MutableList<Argument> = mutableListOf()
-    @Placeholder("resSample")
+    @Placeholder(TemplatePlaceholder.resSample)
     var resSample: String = ""
-    @Placeholder("remark")
+    @Placeholder(TemplatePlaceholder.remark)
     var remark: String? = null
 
 
@@ -80,13 +81,11 @@ open class Template(project: MavenProject, log: Log, var source: String, methodC
 
             var subClassName = ""
             if (responseObjectClassName!!.contains("<")) {
-                subClassName = responseObjectClassName.substring(responseObjectClassName.indexOf("<"), responseObjectClassName.indexOf(">"))
-
+                subClassName = responseObjectClassName!!.substring(responseObjectClassName!!.indexOf("<") + 1, responseObjectClassName!!.indexOf(">"))
             }
 
-            val clazzOptional = ProjectUtils.loadClass(project!!, log!!, responseObjectClassName!!)
+            val clazzOptional = ProjectUtils.loadClass(project!!, log!!, subClassName)
             clazzOptional.ifPresent { clazz ->
-                println("find clazz:$clazz")
                 result = mockData(clazz)
             }
         }

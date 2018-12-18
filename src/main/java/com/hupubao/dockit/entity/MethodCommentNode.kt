@@ -11,6 +11,7 @@ class MethodCommentNode {
     var requestArgList: MutableList<Argument> = mutableListOf()
     var responseArgList: MutableList<Argument> = mutableListOf()
     var responseObjectClassName: String? = null
+    var remark: String? = ""
 
 
 }

@@ -4,6 +4,7 @@ import com.github.javaparser.ast.Node
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.javadoc.JavadocBlockTag
 import com.github.javaparser.javadoc.description.JavadocInlineTag
+import com.hupubao.dockit.constants.TemplatePlaceholder
 import com.hupubao.dockit.entity.MethodCommentNode
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.project.MavenProject
@@ -21,19 +22,27 @@ open class MethodCommentParser {
         val methodCommentNode = MethodCommentNode()
         methodCommentNode.methodName = methodNode.name.toString()
         for (tagMethod in methodNode.javadocComment.get().parse().blockTags) {
-            if (tagMethod.tagName == "title") {
+            if (tagMethod.tagName == TemplatePlaceholder.title) {
                 methodCommentNode.title = tagMethod.content.toText()
             }
 
-            if (tagMethod.tagName == "description") {
+            if (tagMethod.tagName == TemplatePlaceholder.desc) {
                 methodCommentNode.descriptionList.add(tagMethod.content.toText())
             }
 
-            if (tagMethod.tagName == "requestMethod") {
+            if (tagMethod.tagName == TemplatePlaceholder.url) {
+                methodCommentNode.requestUrl = tagMethod.content.toText()
+            }
+
+            if (tagMethod.tagName == TemplatePlaceholder.method) {
                 methodCommentNode.requestMethod = tagMethod.content.toText()
             }
 
-            if (tagMethod.tagName == "arg") {
+            if (tagMethod.tagName == TemplatePlaceholder.remark) {
+                methodCommentNode.remark = tagMethod.content.toText()
+            }
+
+            if (tagMethod.tagName == TemplatePlaceholder.arg) {
 
                 if (tagMethod.content.isEmpty) {
                     continue

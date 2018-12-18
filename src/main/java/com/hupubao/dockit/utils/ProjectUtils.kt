@@ -17,6 +17,7 @@ object ProjectUtils {
     fun loadClass(project: MavenProject, log: Log, name: String): Optional<Class<*>> {
         val loader = URLClassLoader(project.compileClasspathElements.map { element -> File(element.toString()).toURI().toURL() }.toTypedArray())
         return try {
+            loader.urLs.forEach { println(it) }
             Optional.of(loader.loadClass(name))
         } catch (e: ClassNotFoundException) {
             log.warn("[dockit]Can not find class:$name")
