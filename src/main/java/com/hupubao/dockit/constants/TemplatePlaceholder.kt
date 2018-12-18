@@ -3,6 +3,8 @@ package com.hupubao.dockit.constants
 object TemplatePlaceholder {
 
     const val title = "title"
+    const val available = "available"
+    const val version = "version"
     const val desc = "desc"
     const val url = "url"
     const val method = "method"

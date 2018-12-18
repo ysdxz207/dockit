@@ -5,6 +5,7 @@ import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.javadoc.JavadocBlockTag
 import com.github.javaparser.javadoc.description.JavadocInlineTag
 import com.hupubao.dockit.constants.TemplatePlaceholder
+import com.hupubao.dockit.entity.Argument
 import com.hupubao.dockit.entity.MethodCommentNode
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.project.MavenProject
@@ -26,9 +27,18 @@ open class MethodCommentParser {
                 methodCommentNode.title = tagMethod.content.toText()
             }
 
+            if (tagMethod.tagName == TemplatePlaceholder.available) {
+                methodCommentNode.available = tagMethod.content.toText()
+            }
+
+            if (tagMethod.tagName == TemplatePlaceholder.version) {
+                methodCommentNode.version = tagMethod.content.toText()
+            }
+
             if (tagMethod.tagName == TemplatePlaceholder.desc) {
                 methodCommentNode.descriptionList.add(tagMethod.content.toText())
             }
+
 
             if (tagMethod.tagName == TemplatePlaceholder.url) {
                 methodCommentNode.requestUrl = tagMethod.content.toText()
@@ -48,35 +58,21 @@ open class MethodCommentParser {
                     continue
                 }
 
-                val argText = tagMethod.content.toText()
-
-                val argSplitIndex = argText.indexOf(" ")
-                val argInfo = argText.substring(0, argSplitIndex).split(",")
-                val argDescription = argText.substring(argSplitIndex)
-
-                val argName = argInfo[0].trim()
-
-                val argType = if (argInfo.size > 1) {
-                    argInfo[1].trim()
-                } else {
-                    "Object"
-                }
-
-                val argRequired = if (argInfo.size > 2) {
-                    argInfo[2].trim().replace("required=", "")
-                } else {
-                    "No"
-                }
-
                 methodCommentNode.requestArgList.add(
-                    com.hupubao.dockit.entity.Argument(
-                        argName,
-                        argDescription,
-                        argRequired,
-                        argType
-                    )
+                    parseArgument(tagMethod)
                 )
             }
+            if (tagMethod.tagName == TemplatePlaceholder.resArg) {
+
+                if (tagMethod.content.isEmpty) {
+                    continue
+                }
+
+                methodCommentNode.responseArgList.add(
+                    parseArgument(tagMethod)
+                )
+            }
+
 
             if (tagMethod.type == JavadocBlockTag.Type.RETURN) {
                 if (!tagMethod.content.isEmpty) {
@@ -93,5 +89,34 @@ open class MethodCommentParser {
 
         }
         return Optional.of(methodCommentNode)
+    }
+
+    private fun parseArgument(tagMethod: JavadocBlockTag): Argument {
+        val argText = tagMethod.content.toText()
+
+        val argSplitIndex = argText.indexOf(" ")
+        val argInfo = argText.substring(0, argSplitIndex).split(",")
+        val argDescription = argText.substring(argSplitIndex)
+
+        val argName = argInfo[0].trim()
+
+        val argType = if (argInfo.size > 1) {
+            argInfo[1].trim()
+        } else {
+            "Object"
+        }
+
+        val argRequired = if (argInfo.size > 2) {
+            argInfo[2].trim().replace("required=", "")
+        } else {
+            "No"
+        }
+
+        return com.hupubao.dockit.entity.Argument(
+            argName,
+            argDescription,
+            argRequired,
+            argType
+        )
     }
 }
