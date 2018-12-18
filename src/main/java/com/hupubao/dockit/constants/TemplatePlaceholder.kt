@@ -10,4 +10,9 @@ object TemplatePlaceholder {
     const val resArg = "resArg"
     const val resSample = "resSample"
     const val remark = "remark"
+
+    const val argumentName = "name"
+    const val argumentDescription = "description"
+    const val argumentRequired = "required"
+    const val argumentType = "type"
 }

@@ -1,16 +1,17 @@
 package com.hupubao.dockit.entity
 
 import com.hupubao.dockit.annotation.Placeholder
+import com.hupubao.dockit.constants.TemplatePlaceholder
 
 class Argument {
 
-    @Placeholder("name")
+    @Placeholder(TemplatePlaceholder.argumentName)
     var name: String? = null
-    @Placeholder("description")
+    @Placeholder(TemplatePlaceholder.argumentDescription)
     var description: String? = null
-    @Placeholder("required")
+    @Placeholder(TemplatePlaceholder.argumentRequired)
     var required: String? = "Yes"
-    @Placeholder("type")
+    @Placeholder(TemplatePlaceholder.argumentType)
     var type: String? = null
 
     constructor(name: String?, description: String?, required: String?, type: String?) {
