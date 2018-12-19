@@ -6,7 +6,7 @@ import com.hupubao.dockit.constants.TemplatePlaceholder
 class Argument {
 
     @Placeholder(TemplatePlaceholder.ARGUMENT_NAME)
-    var name: String? = null
+    var name: String = ""
     @Placeholder(TemplatePlaceholder.ARGUMENT_DESCRIPTION)
     var description: String? = null
     @Placeholder(TemplatePlaceholder.ARGUMENT_REQUIRED)
@@ -14,7 +14,7 @@ class Argument {
     @Placeholder(TemplatePlaceholder.ARGUMENT_TYPE)
     var type: String? = null
 
-    constructor(name: String?, description: String?, required: String?, type: String?) {
+    constructor(name: String, description: String?, required: String?, type: String?) {
         this.name = name
         this.description = description
         this.required = required

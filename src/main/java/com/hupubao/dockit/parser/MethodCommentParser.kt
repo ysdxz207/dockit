@@ -27,12 +27,12 @@ open class MethodCommentParser {
                 methodCommentNode.title = tagMethod.content.toText()
             }
 
-            if (tagMethod.tagName == TemplatePlaceholder.available) {
-                methodCommentNode.available = tagMethod.content.toText()
-            }
-
             if (tagMethod.tagName == TemplatePlaceholder.version) {
                 methodCommentNode.version = tagMethod.content.toText()
+            }
+
+            if (tagMethod.tagName == TemplatePlaceholder.status) {
+                methodCommentNode.status = tagMethod.content.toText()
             }
 
             if (tagMethod.tagName == TemplatePlaceholder.desc) {

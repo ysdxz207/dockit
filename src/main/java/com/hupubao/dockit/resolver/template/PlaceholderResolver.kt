@@ -35,9 +35,10 @@ object PlaceholderResolver {
         for (placeholder in placeholderArr) {
             val placeholderUndressed = undressPlaceholder(placeholder)
             var value = ""
-            if (propertyValue != null) {
+            if (propertyValue != null && propertyValue.toString().trim().isNotEmpty()) {
                 value = propertyValue.toString()
             }
+
             node.chars = node.chars.replace("\${$placeholderUndressed}", value)
 
         }
