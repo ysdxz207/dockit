@@ -10,6 +10,7 @@ import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
 import org.apache.maven.project.MavenProject
+import java.io.File
 import java.nio.charset.Charset
 import java.nio.file.Paths
 
@@ -42,11 +43,14 @@ class DockitMojo : AbstractMojo() {
         log.info("[dockit]Project basedir:${project.basedir}")
         log.info("[dockit]Load template:$template")
 
+        val templateText: String
         if (template == "DEFAULT") {
             template = "/template/DEFAULT.MD"
+            templateText = DockitMojo::class.java.getResource(template).readText(Charset.forName(templateCharset))
+        } else {
+            templateText = File(template).readText(Charset.forName(templateCharset))
         }
 
-        val templateText = DockitMojo::class.java.getResource(template).readText(Charset.forName(templateCharset))
 
         val classNodeList = CommentParser.parseComments(project, log)
 
