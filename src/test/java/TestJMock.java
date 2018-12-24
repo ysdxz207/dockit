@@ -13,5 +13,7 @@ public class TestJMock {
                 .stringSeed("成功", "失败", "测试");
         String str = JMockData.mock(String.class, mockConfig);
         System.out.println(str);
+
+
     }
 }

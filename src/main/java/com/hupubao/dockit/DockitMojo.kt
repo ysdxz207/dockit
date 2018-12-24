@@ -33,6 +33,9 @@ class DockitMojo : AbstractMojo() {
     @Parameter(defaultValue = "DEFAULT", property = "outDir", required = true)
     lateinit var outDir: String
 
+    @Parameter(defaultValue = "false", property = "singleOutDir", required = false)
+    lateinit var singleOutDir: String
+
     @Parameter(defaultValue = "\${project}", required = true, readonly = true)
     lateinit var project: MavenProject
 
@@ -62,7 +65,7 @@ class DockitMojo : AbstractMojo() {
 
             val outDirectory = Paths.get(
                 outDir,
-                if (classNode.classDescription == null) classNode.className else classNode.classDescription
+                if ("true" == singleOutDir.toLowerCase()) "" else classNode.classNameOrClassDescription()
             ).toString()
 
             classNode.methodCommentNodeList.parallelStream().forEach { methodCommentNode ->

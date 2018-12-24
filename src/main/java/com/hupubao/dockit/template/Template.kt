@@ -84,7 +84,6 @@ open class Template(
         if (arr is JSONArray) {
             json = arr
         } else if (arr is JSONObject){
-            println(arr)
             json = JSONObject()
             val obj = mockObjectData(resArgList)
             json.putAll(obj)
