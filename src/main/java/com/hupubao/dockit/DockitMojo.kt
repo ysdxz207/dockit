@@ -77,7 +77,6 @@ class DockitMojo : AbstractMojo() {
                 }
 
                 title = title.replace("/", " or ")
-                println(title)
 
                 val mdText = MarkdownTemplate(project, log, templateText, methodCommentNode).render()
                 val pathOut = Paths.get(outDirectory, "$title.MD")
