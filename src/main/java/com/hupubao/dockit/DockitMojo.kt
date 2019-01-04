@@ -70,11 +70,17 @@ class DockitMojo : AbstractMojo() {
 
             classNode.methodCommentNodeList.parallelStream().forEach { methodCommentNode ->
 
-                val methodNameOrTitle =
-                    if (methodCommentNode.title == null) methodCommentNode.methodName!! else methodCommentNode.title!!
+                var title = methodCommentNode.title
+
+                if (title == null || title.isEmpty()) {
+                    return@forEach
+                }
+
+                title = title.replace("/", " or ")
+                println(title)
 
                 val mdText = MarkdownTemplate(project, log, templateText, methodCommentNode).render()
-                val pathOut = Paths.get(outDirectory, "$methodNameOrTitle.MD")
+                val pathOut = Paths.get(outDirectory, "$title.MD")
                 val file = pathOut.toFile()
                 /*if (file.exists()) {
                     file.delete()
