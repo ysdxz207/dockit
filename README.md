@@ -1,5 +1,7 @@
 # Dockit
 
+## Dockit is a markdown document generator for via javadoc.
+
 1. `mvn clean install`
 
 2. pom.xml:
@@ -29,4 +31,6 @@
 ```
 
 3. `mvn clean dockit:dockit`
+
+4. You can custom your doc template with [DEFAULT.MD](https://github.com/ysdxz207/dockit/blob/master/src/main/resources/template/DEFAULT.MD)
 
