@@ -16,12 +16,11 @@
  */
 ```
 
-生成dockit目录结构如下：
+- 生成dockit目录结构如下：
 
+dockit - 阿福接口 - 阿福列表接口.MD
 
-dockit -阿福接口 -阿福列表接口.MD
-
--若不需要按目录生成，则可以设置插件参数singleOutDir=true
+- 若不需要按目录生成，则可以设置插件参数singleOutDir=true
 
 
 1. pom.xml:
