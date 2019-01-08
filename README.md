@@ -37,8 +37,8 @@
 
 > 你也可以根据默认模版 [DEFAULT.MD](https://github.com/ysdxz207/dockit/blob/master/src/main/resources/template/DEFAULT.MD)自定义你的文档模版
 
-
 5. javadoc format:
+
 > javadoc 格式如下：
 
 ```
@@ -52,6 +52,8 @@
  * @arg pageNum,Integer,是 页码
  * @arg pageSize,Integer,否 分页大小
  * @resArg service,String,是 请求服务，原样返回
+ * @resArg afuType.id,String,是 阿福类型ID
+ * @resArg afuType.name,String,是 阿福类型名
  * @resArg list,Array,是 阿福列表
  * @resArg list[id],String,是 ID
  * @resArg list[name],String,是 名称
