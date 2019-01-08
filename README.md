@@ -59,6 +59,7 @@ dockit - 阿福接口 - 阿福列表接口.MD
 /**
  * @title 阿福列表接口
  * @desc 获取阿福列表
+ * @desc 可以有多条描述
  * @url afu.list
  * @version 1.0.0
  * @status 可用
