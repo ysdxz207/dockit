@@ -30,13 +30,13 @@
 
 ```
 
-1. `mvn clean dockit:dockit`
+2. `mvn clean dockit:dockit`
 
-1. You can custom your doc template with [DEFAULT.MD](https://github.com/ysdxz207/dockit/blob/master/src/main/resources/template/DEFAULT.MD)
+3. You can custom your doc template with [DEFAULT.MD](https://github.com/ysdxz207/dockit/blob/master/src/main/resources/template/DEFAULT.MD)
 
 > 你也可以根据默认模版 [DEFAULT.MD](https://github.com/ysdxz207/dockit/blob/master/src/main/resources/template/DEFAULT.MD)自定义你的文档模版
 
-1. javadoc format:
+4. javadoc format:
 
 > javadoc 格式如下：
 
