@@ -22,6 +22,7 @@ dockit -阿福接口 -阿福列表接口.MD
 
 -若不需要按目录生成，则可以设置插件参数singleOutDir=true
 
+
 1. pom.xml:
 
 ```xml
