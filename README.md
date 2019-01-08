@@ -1,9 +1,10 @@
 # Dockit
 
-## Dockit is a markdown document generator via javadoc.
 > ## Dockit 是一个通过javadoc生成markdown文档的生成工具。
 
 - 不依赖于@RequestMapping注解，直接根据javadoc中是否有@title来生成接口文档
+
+- 可应用于dubbo项目中
 
 - 若需要dockit生成文档，则需要在类的javadoc中加入@dockit
 如：
@@ -51,13 +52,9 @@ dockit -阿福接口 -阿福列表接口.MD
 
 2. `mvn clean dockit:dockit`
 
-3. You can custom your doc template with [DEFAULT.MD](https://github.com/ysdxz207/dockit/blob/master/src/main/resources/template/DEFAULT.MD)
+3. 你也可以根据默认模版 [DEFAULT.MD](https://github.com/ysdxz207/dockit/blob/master/src/main/resources/template/DEFAULT.MD)自定义你的文档模版
 
-> 你也可以根据默认模版 [DEFAULT.MD](https://github.com/ysdxz207/dockit/blob/master/src/main/resources/template/DEFAULT.MD)自定义你的文档模版
-
-4. javadoc format:
-
-> javadoc 格式如下：
+4. javadoc 格式如下：
 
 ```
 /**
