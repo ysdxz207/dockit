@@ -62,7 +62,7 @@ dockit - 阿福接口 - 阿福列表接口.MD
  * @url afu.list
  * @version 1.0.0
  * @status 可用
- * @method POST
+ * @method POST,GET
  * @arg pageNum,Integer,是 页码
  * @arg pageSize,Integer,否 分页大小
  * @resArg service,String,是 请求服务，原样返回
