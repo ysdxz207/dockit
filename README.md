@@ -4,7 +4,7 @@
 > ## Dockit 是一个通过javadoc生成markdown文档的生成工具。
 
 
-2. pom.xml:
+1. pom.xml:
 
 ```xml
 <plugin>
@@ -30,13 +30,13 @@
 
 ```
 
-3. `mvn clean dockit:dockit`
+1. `mvn clean dockit:dockit`
 
-4. You can custom your doc template with [DEFAULT.MD](https://github.com/ysdxz207/dockit/blob/master/src/main/resources/template/DEFAULT.MD)
+1. You can custom your doc template with [DEFAULT.MD](https://github.com/ysdxz207/dockit/blob/master/src/main/resources/template/DEFAULT.MD)
 
 > 你也可以根据默认模版 [DEFAULT.MD](https://github.com/ysdxz207/dockit/blob/master/src/main/resources/template/DEFAULT.MD)自定义你的文档模版
 
-5. javadoc format:
+1. javadoc format:
 
 > javadoc 格式如下：
 
