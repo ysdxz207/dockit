@@ -15,8 +15,8 @@ import com.vladsch.flexmark.parser.Parser
 import com.vladsch.flexmark.util.sequence.BasedSequence
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.project.MavenProject
-import java.lang.Exception
 import java.util.*
+import java.util.stream.Collectors
 
 open class Template(
     project: MavenProject, log: Log, var source: String,
@@ -57,16 +57,21 @@ open class Template(
         var result = ""
         if (methodCommentNode.responseObjectClassName != null) {
 
-            var subClassName = ""
-            if (methodCommentNode.responseObjectClassName!!.contains("<")) {
-                subClassName = methodCommentNode.responseObjectClassName!!.substring(
+            val subClassName: String = if (methodCommentNode.responseObjectClassName!!.contains("<")) {
+                methodCommentNode.responseObjectClassName!!.substring(
                     methodCommentNode.responseObjectClassName!!.indexOf("<") + 1,
                     methodCommentNode.responseObjectClassName!!.indexOf(">")
                 )
+            } else {
+                methodCommentNode.responseObjectClassName!!
             }
 
             val clazzOptional = ProjectUtils.loadClass(project!!, log!!, subClassName)
             clazzOptional.ifPresent { clazz ->
+                methodCommentNode.responseArgList = Arrays.stream(clazz.declaredFields).map { f ->
+
+                    Argument(f.name, f.name, "Yes", f.type.simpleName)
+                }.collect(Collectors.toList())
                 result = mockJSONObjectData(clazz)
             }
         } else {

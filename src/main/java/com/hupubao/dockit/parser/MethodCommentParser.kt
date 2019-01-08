@@ -82,7 +82,7 @@ open class MethodCommentParser {
 
                     if (linkTypeStream.isPresent) {
                         val linkTypeTag = linkTypeStream.get() as JavadocInlineTag
-                        methodCommentNode.responseObjectClassName = linkTypeTag.content
+                        methodCommentNode.responseObjectClassName = linkTypeTag.content.trim()
                     }
                 }
             }
