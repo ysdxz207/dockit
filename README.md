@@ -31,7 +31,6 @@
     <artifactId>dockit-maven-plugin</artifactId>
     <version>1.0.0</version>
     <configuration>
-        <scanPackage>com.example.your.package.to.scan</scanPackage>
         <templateCharset>UTF-8</templateCharset>
         <singleOutDir>false</singleOutDir>
         <outDir>${project.build.directory}/dockit</outDir>

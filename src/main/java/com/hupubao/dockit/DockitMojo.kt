@@ -21,9 +21,6 @@ import java.nio.file.Paths
 @Mojo(name = "dockit", defaultPhase = LifecyclePhase.COMPILE, requiresDependencyResolution = ResolutionScope.COMPILE)
 class DockitMojo : AbstractMojo() {
 
-    @Parameter(defaultValue = "", property = "scanPackage", required = true)
-    lateinit var scanPackage: String
-
     @Parameter(defaultValue = "DEFAULT", property = "template", required = true)
     lateinit var template: String
 
@@ -42,7 +39,6 @@ class DockitMojo : AbstractMojo() {
     @Throws(MojoExecutionException::class, MojoFailureException::class)
     override fun execute() {
         log.info("[dockit]Start dockit......")
-        log.info("[dockit]Scanning package [$scanPackage]...")
         log.info("[dockit]Project basedir:${project.basedir}")
         log.info("[dockit]Load template:$template")
 
