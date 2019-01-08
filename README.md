@@ -51,7 +51,8 @@
 
 2. `mvn clean dockit:dockit`
 
-3. 你也可以根据默认模版 [DEFAULT.MD](https://github.com/ysdxz207/dockit/blob/master/src/main/resources/template/DEFAULT.MD)自定义你的文档模版
+3. 你也可以根据默认模版 [DEFAULT.MD](https://github.com/ysdxz207/dockit/blob/master/src/main/resources/template/DEFAULT.MD)
+自定义你的文档模版，将插件template参数修改为你的模板路径即可
 
 4. javadoc 格式如下：
 
