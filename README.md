@@ -31,7 +31,7 @@ dockit - 阿福接口 - 阿福列表接口.MD
     <artifactId>dockit-maven-plugin</artifactId>
     <version>1.0.0</version>
     <configuration>
-        <scanPackage>cn.lamic.chagoi</scanPackage>
+        <scanPackage>com.example.your.package.to.scan</scanPackage>
         <templateCharset>UTF-8</templateCharset>
         <singleOutDir>false</singleOutDir>
         <outDir>${project.build.directory}/dockit</outDir>
