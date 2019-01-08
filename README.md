@@ -3,6 +3,24 @@
 ## Dockit is a markdown document generator via javadoc.
 > ## Dockit 是一个通过javadoc生成markdown文档的生成工具。
 
+- 不依赖于@RequestMapping注解，直接根据javadoc中是否有@title来生成接口文档
+
+- 若需要dockit生成文档，则需要在类的javadoc中加入@dockit
+如：
+```
+/**
+ * @author ysdxz207
+ * @date 2018-08-02
+ * @dockit 阿福接口
+ */
+```
+
+生成dockit目录结构如下：
+
+
+dockit -阿福接口 -阿福列表接口.MD
+
+-若不需要按目录生成，则可以设置插件参数singleOutDir=true
 
 1. pom.xml:
 
