@@ -3,7 +3,6 @@
 ## Dockit is a markdown document generator via javadoc.
 > ## Dockit 是一个通过javadoc生成markdown文档的生成工具。
 
-1. `mvn clean install`
 
 2. pom.xml:
 
