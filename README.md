@@ -27,7 +27,7 @@
 
 ```xml
 <plugin>
-    <groupId>com.hupubao</groupId>
+    <groupId>win.hupubao</groupId>
     <artifactId>dockit-maven-plugin</artifactId>
     <version>1.0.0</version>
     <configuration>
