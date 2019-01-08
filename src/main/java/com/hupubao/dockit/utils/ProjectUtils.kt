@@ -21,6 +21,8 @@ object ProjectUtils {
         } catch (e: ClassNotFoundException) {
             log.warn("[dockit]Can not find class:$name")
             Optional.empty()
+        } catch (e: Throwable) {
+            Optional.empty()
         }
     }
 }
