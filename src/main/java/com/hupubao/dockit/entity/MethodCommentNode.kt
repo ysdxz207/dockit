@@ -4,8 +4,7 @@ import com.hupubao.dockit.annotation.Placeholder
 import com.hupubao.dockit.constants.TemplatePlaceholder
 import com.hupubao.dockit.enums.PlaceholderType
 
-class MethodCommentNode {
-
+open class MethodCommentNode : Cloneable {
 
     var methodName: String? = null
     @Placeholder(TemplatePlaceholder.title)
@@ -31,4 +30,7 @@ class MethodCommentNode {
     var remark: String? = ""
 
 
+    public override fun clone(): MethodCommentNode {
+        return super.clone() as MethodCommentNode
+    }
 }

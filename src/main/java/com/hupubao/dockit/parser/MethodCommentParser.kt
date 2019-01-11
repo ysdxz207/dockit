@@ -68,9 +68,7 @@ open class MethodCommentParser {
                     continue
                 }
 
-                methodCommentNode.responseArgList.add(
-                    parseArgument(tagMethod)
-                )
+                parseResArgument(methodCommentNode, tagMethod)
             }
 
 
@@ -94,9 +92,11 @@ open class MethodCommentParser {
     private fun parseArgument(tagMethod: JavadocBlockTag): Argument {
         val argText = tagMethod.content.toText()
 
-        val argSplitIndex = argText.indexOf(" ")
-        val argInfo = argText.substring(0, argSplitIndex).split(",")
-        val argDescription = argText.substring(argSplitIndex)
+        val argInfo = argText.split(",")
+        if (argInfo.size < 4) {
+            return Argument("", "Unknown", "请检查javadoc格式是否正确", "", "")
+        }
+        val argDescription = argInfo[3].trim()
 
         val argName = argInfo[0].trim()
 
@@ -114,9 +114,54 @@ open class MethodCommentParser {
 
         return com.hupubao.dockit.entity.Argument(
             argName,
+            argName,
             argDescription,
             argRequired,
             argType
         )
+    }
+
+    private fun parseResArgument(methodCommentNode: MethodCommentNode,
+                              tagMethod: JavadocBlockTag) {
+
+        val argument = parseArgument(tagMethod)
+
+        val argNameArr = argument.originName.split(".")
+
+        // 解析JSONObject或JSONArray属性名
+        if (argument.originName.contains(".")) {
+            val parentProperty = argNameArr[argNameArr.size - 2]
+            val property = argNameArr[argNameArr.size - 1]
+
+            val parentArgument = findParentResArgument(methodCommentNode.responseArgList, parentProperty)
+
+
+            if (parentArgument != null) {
+                argument.name = property
+                argument.level = argNameArr.size - 1
+                argument.levelPrefix = " " + ("-".repeat(argument.level)) + " "
+                parentArgument.children.add(argument)
+            }
+
+        } else {
+            methodCommentNode.responseArgList.add(argument)
+        }
+    }
+
+    private fun findParentResArgument(resArgumentList: List<Argument>, parentProperty: String): Argument? {
+
+        val argument = resArgumentList.find { argument -> argument.name == parentProperty }
+
+        if (argument != null) {
+            return argument
+        }
+
+        resArgumentList.forEach { argument ->
+            if (!argument.children.isEmpty()) {
+                return findParentResArgument(argument.children, parentProperty)
+            }
+        }
+
+        return null
     }
 }

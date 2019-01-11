@@ -1,6 +1,8 @@
 package com.hupubao.dockit.resolver.template
 
 import com.hupubao.dockit.annotation.Placeholder
+import com.hupubao.dockit.constants.TemplatePlaceholder
+import com.hupubao.dockit.entity.Argument
 import com.hupubao.dockit.enums.PlaceholderType
 import com.vladsch.flexmark.ast.BulletList
 import com.vladsch.flexmark.ast.Node
@@ -122,7 +124,15 @@ object PlaceholderResolver {
         newText.chars = SubSequence.of(newTextChars)
         tableItem.insertBefore(newText)
         for (p in argument::class.memberProperties) {
-            resolveSimpleValue(newText, mutableListOf(p.name), p.getter.call(argument))
+            val vau = p.getter.call(argument)
+            // array里嵌套array
+            if (vau is Iterable<*>) {
+                vau.forEach { arg ->
+                    resolveTableItem(tableItem, tablePlaceholderPrefix, arg!!)
+                }
+            } else {
+                resolveSimpleValue(newText, mutableListOf(p.name), vau)
+            }
         }
     }
 

@@ -13,6 +13,7 @@ object TemplatePlaceholder {
     const val resSample = "resSample"
     const val remark = "remark"
 
+    const val ARGUMENT_NAME_ORIGIN = "originName"
     const val ARGUMENT_NAME = "name"
     const val ARGUMENT_DESCRIPTION = "description"
     const val ARGUMENT_REQUIRED = "required"
