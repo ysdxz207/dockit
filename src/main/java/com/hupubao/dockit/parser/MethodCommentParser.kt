@@ -130,7 +130,7 @@ open class MethodCommentParser {
 
         // 解析JSONObject或JSONArray属性名
         if (argument.originName.contains(".")) {
-            val parentProperty = argNameArr[argNameArr.size - 2]
+            val parentProperty = argument.originName.substring(0, argument.originName.lastIndexOf("."))
             val property = argNameArr[argNameArr.size - 1]
 
             val parentArgument = findParentResArgument(methodCommentNode.responseArgList, parentProperty)
@@ -150,7 +150,10 @@ open class MethodCommentParser {
 
     private fun findParentResArgument(resArgumentList: List<Argument>, parentProperty: String): Argument? {
 
-        val argument = resArgumentList.find { argument -> argument.name == parentProperty }
+        if (parentProperty.contains("arr.")) {
+            println()
+        }
+        val argument = resArgumentList.find { argument -> argument.originName == parentProperty }
 
         if (argument != null) {
             return argument

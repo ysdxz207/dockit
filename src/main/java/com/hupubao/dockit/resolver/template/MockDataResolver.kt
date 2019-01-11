@@ -100,7 +100,7 @@ class MockDataResolver(project: MavenProject?, log: Log?) {
                         arr.add(mockJSONObjectData(argument.children))
                     }
                     data[argument.name] = arr
-                } else if (argument.type.toLowerCase() == "object"){
+                } else {
                     data[argument.name] = mockJSONObjectData(argument.children)
                 }
             }
