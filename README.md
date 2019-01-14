@@ -91,6 +91,8 @@
  
  ```
  
+ - 生成[样例](./example/afu.md)
+ 
  - 返回值也可以用`@return {@link win.hupubao.bean.AfuBean}`，但这与@resArg不能共用
  
  - 标签释义
