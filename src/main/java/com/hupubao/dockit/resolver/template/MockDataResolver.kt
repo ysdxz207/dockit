@@ -64,17 +64,6 @@ class MockDataResolver(project: MavenProject?, log: Log?) {
 
     private fun mockData(resArgList: List<Argument>): String {
 
-        val isArray = resArgList.size == 1
-
-        if (isArray) {
-            val randomSize = Random.nextInt(1, 3)
-            val arr = JSONArray()
-            for (a in 1..randomSize) {
-                arr.add(mockJSONObjectData(resArgList))
-            }
-            return JSON.toJSONString(arr, SerializerFeature.PrettyFormat)
-        }
-
         return JSON.toJSONString(mockJSONObjectData(resArgList), SerializerFeature.PrettyFormat)
     }
 
