@@ -1,46 +1,42 @@
 ### 阿福列表接口
-####描述
-
+#### 描述
 1. 获取阿福列表
 
-####版本
-
+#### 版本
 > 1.0.0
 
-####是否可用
-
+#### 是否可用
 可用
 
-####请求URL 
-
+#### 请求URL
 > ` afu.list`
 
-####请求方式
-
+#### 请求方式
 > `POST`
 
-####参数 
-
+#### 参数
 |参数名|必选|类型|说明|
 |:----    |:---|:----- |-----   |
 |pageNum |是  |Integer |页码   |
 |pageSize |否  |Integer |分页大小   |
 
-####返回示例
-
-``` 
+#### 返回示例
+``` json
 {
 	"service":{
 		"subObject":{
-			"name":"gpde",
-			"id":8799
+			"name":"QmWApOU",
+			"id":7973
 		},
 		"subArray":[
 			{
-				"name":"O"
+				"name":"icYG"
 			},
 			{
-				"name":"Ag"
+				"name":"I4"
+			},
+			{
+				"name":"681DozY8V9"
 			}
 		]
 	},
@@ -48,185 +44,128 @@
 		{
 			"arr":[
 				{
-					"arrValue":"IL0Wz",
+					"arrValue":"Y5w",
 					"subArr":[
 						{
-							"subArrId":"chE",
-							"subArrName":"onfHIEMp"
+							"subArrId":"9dm4vW",
+							"subArrName":"f93iG"
 						},
 						{
-							"subArrId":"jPHV3jc6XM",
-							"subArrName":"9"
-						},
-						{
-							"subArrId":"Es5lZo",
-							"subArrName":"lQr1edEE"
+							"subArrId":"kiRtRr",
+							"subArrName":"Oexe"
 						}
 					],
-					"arrName":"XkVaF3u",
+					"arrName":"JOyE0navNv",
 					"subObj":{
-						"objId":"LqPG7q75",
-						"objName":"bwZbCKbn"
+						"objId":"7ec",
+						"objName":"V5fgtrGa"
 					}
 				},
 				{
-					"arrValue":"X",
+					"arrValue":"2R8imYGW",
 					"subArr":[
 						{
-							"subArrId":"a",
-							"subArrName":"gKyhkez"
+							"subArrId":"aTEek",
+							"subArrName":"r6"
 						},
 						{
-							"subArrId":"fNAeGd",
-							"subArrName":"PLeC2o1"
-						},
-						{
-							"subArrId":"17R8VNvZ",
-							"subArrName":"94Wnnv"
-						}
-					],
-					"arrName":"V9KX61Gzk5",
-					"subObj":{
-						"objId":"f",
-						"objName":"ktdQ"
-					}
-				},
-				{
-					"arrValue":"tuFulLrtJV",
-					"subArr":[
-						{
-							"subArrId":"aqL",
-							"subArrName":"RTDzu6"
-						},
-						{
-							"subArrId":"yr8jd",
-							"subArrName":"GUVgelp"
-						},
-						{
-							"subArrId":"5VIcy",
-							"subArrName":"cYCIau"
-						}
-					],
-					"arrName":"jPHkM",
-					"subObj":{
-						"objId":"Tur",
-						"objName":"42S02xE1d"
-					}
-				}
-			],
-			"createTime":"P3qH",
-			"name":"LZSLNpn",
-			"id":"9Fo8",
-			"type":"8Y1ryGLp",
-			"content":"tA8yJdhV"
-		},
-		{
-			"arr":[
-				{
-					"arrValue":"ekgJkw",
-					"subArr":[
-						{
-							"subArrId":"qh2Ld",
-							"subArrName":"1r"
-						},
-						{
-							"subArrId":"Z1GRNuy8k",
-							"subArrName":"cxZKQ"
-						},
-						{
-							"subArrId":"h7ytvqgvI",
-							"subArrName":"VcyLKLMV"
-						}
-					],
-					"arrName":"xLh",
-					"subObj":{
-						"objId":"oo",
-						"objName":"jrdCGS"
-					}
-				},
-				{
-					"arrValue":"g",
-					"subArr":[
-						{
-							"subArrId":"jnqWSmM",
-							"subArrName":"O6UfHWLqgb"
-						},
-						{
-							"subArrId":"rMpbiZAG",
-							"subArrName":"C8"
-						},
-						{
-							"subArrId":"P8",
-							"subArrName":"YmCEm8vYg"
-						}
-					],
-					"arrName":"4i6Vs5XB",
-					"subObj":{
-						"objId":"qklN",
-						"objName":"f"
-					}
-				}
-			],
-			"createTime":"HStR",
-			"name":"wPSf9CB",
-			"id":"VXObuGWOjn",
-			"type":"o8cKg18",
-			"content":"s7EgYlSO"
-		},
-		{
-			"arr":[
-				{
-					"arrValue":"GugNlkM",
-					"subArr":[
-						{
-							"subArrId":"kj3ph9Pp",
-							"subArrName":"Fu7i"
-						},
-						{
-							"subArrId":"4b9aBw",
+							"subArrId":"1IUzl",
 							"subArrName":"8"
-						}
-					],
-					"arrName":"cVwO9fmVj",
-					"subObj":{
-						"objId":"Zu20qB",
-						"objName":"w1WqeR"
-					}
-				},
-				{
-					"arrValue":"106yyF",
-					"subArr":[
-						{
-							"subArrId":"fckYfuo0ns",
-							"subArrName":"Npau"
 						},
 						{
-							"subArrId":"g9VX",
-							"subArrName":"TS4"
-						},
-						{
-							"subArrId":"DbI6lmGi",
-							"subArrName":"NU"
+							"subArrId":"ct2bEO",
+							"subArrName":"smqzT"
 						}
 					],
-					"arrName":"jto",
+					"arrName":"Hj6i8h8",
 					"subObj":{
-						"objId":"buyFbvDW",
-						"objName":"4qmkyK28"
+						"objId":"cXSsG",
+						"objName":"dmwvmc"
 					}
 				}
 			],
-			"createTime":"mxjBe",
-			"name":"LmBBCSV",
-			"id":"5wO",
-			"type":"K9ijogMX",
-			"content":"rUB"
+			"createTime":"un",
+			"name":"EGzZVyb",
+			"id":"SK",
+			"type":"nSBZop4um",
+			"content":"3hmW01l"
+		},
+		{
+			"arr":[
+				{
+					"arrValue":"ILwvb",
+					"subArr":[
+						{
+							"subArrId":"KxA6skRND",
+							"subArrName":"updG9uItvo"
+						},
+						{
+							"subArrId":"yiFAcwJ3h",
+							"subArrName":"8q2"
+						},
+						{
+							"subArrId":"YvYuPfhrz",
+							"subArrName":"l41L7xbIYl"
+						}
+					],
+					"arrName":"BoIt5qY5",
+					"subObj":{
+						"objId":"iUIC8J0",
+						"objName":"CuAv9"
+					}
+				},
+				{
+					"arrValue":"8icKnhPSV",
+					"subArr":[
+						{
+							"subArrId":"OMe2",
+							"subArrName":"S"
+						},
+						{
+							"subArrId":"LXHj",
+							"subArrName":"soI9"
+						},
+						{
+							"subArrId":"kJCgal",
+							"subArrName":"ojMdBLw7s8"
+						}
+					],
+					"arrName":"p9uj3kKB8",
+					"subObj":{
+						"objId":"c1pU3f94T",
+						"objName":"dDTIXeP4k"
+					}
+				},
+				{
+					"arrValue":"NnsZ",
+					"subArr":[
+						{
+							"subArrId":"V",
+							"subArrName":"cbVz1Koyd"
+						},
+						{
+							"subArrId":"MqCQ",
+							"subArrName":"ty9JEp"
+						}
+					],
+					"arrName":"UEf8iZge9C",
+					"subObj":{
+						"objId":"pdyU",
+						"objName":"KLYWGSc"
+					}
+				}
+			],
+			"createTime":"fabelWM",
+			"name":"tne",
+			"id":"T4c2ZwLC",
+			"type":"Pq2FdfZZ",
+			"content":"hOjSkw"
 		}
 	]
 }
-```
-####返回参数 
 
+```
+#### 返回参数
 |参数名|必选|类型|说明|
 |:----    |:---|:----- |-----   |
 |service |是  |Object |请求服务，原样返回   |
@@ -251,6 +190,5 @@
 | --- objId |是  |String |子对象ID   |
 | --- objName |是  |String |子对象名   |
 
-####备注
-
+#### 备注
 - 
