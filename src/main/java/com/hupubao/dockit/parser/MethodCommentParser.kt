@@ -150,18 +150,19 @@ open class MethodCommentParser {
 
     private fun findParentResArgument(resArgumentList: List<Argument>, parentProperty: String): Argument? {
 
-        if (parentProperty.contains("arr.")) {
-            println()
-        }
-        val argument = resArgumentList.find { argument -> argument.originName == parentProperty }
+        var argument = resArgumentList.find { argument -> argument.originName == parentProperty }
 
         if (argument != null) {
             return argument
         }
 
-        resArgumentList.forEach { argument ->
-            if (!argument.children.isEmpty()) {
-                return findParentResArgument(argument.children, parentProperty)
+        resArgumentList.forEach { arg ->
+            if (!arg.children.isEmpty()) {
+                argument = findParentResArgument(arg.children, parentProperty)
+
+                if (argument != null) {
+                    return argument
+                }
             }
         }
 
