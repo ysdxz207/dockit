@@ -29,7 +29,7 @@
 <plugin>
     <groupId>win.hupubao</groupId>
     <artifactId>dockit-maven-plugin</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <configuration>
         <templateCharset>UTF-8</templateCharset>
         <singleOutDir>false</singleOutDir>
