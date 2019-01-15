@@ -1,33 +1,20 @@
 package com.hupubao.dockit.template
 
-import com.alibaba.fastjson.JSON
-import com.alibaba.fastjson.JSONArray
-import com.alibaba.fastjson.JSONObject
-import com.alibaba.fastjson.serializer.SerializerFeature
-import com.github.jsonzou.jmockdata.JMockData
 import com.hupubao.dockit.entity.Argument
 import com.hupubao.dockit.entity.MethodCommentNode
 import com.hupubao.dockit.resolver.template.MockDataResolver
 import com.hupubao.dockit.resolver.template.PlaceholderResolver
-import com.hupubao.dockit.utils.MockUtils
-import com.hupubao.dockit.utils.ProjectUtils
 import com.vladsch.flexmark.ast.Node
 import com.vladsch.flexmark.parser.Parser
 import com.vladsch.flexmark.util.sequence.BasedSequence
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.project.MavenProject
-import java.util.*
-import java.util.stream.Collectors
-import kotlin.random.Random
 
 open class Template(
-    project: MavenProject, log: Log, var source: String,
+    private var project: MavenProject, private var log: Log, var source: String,
     private var methodCommentNode: MethodCommentNode
 ) {
     lateinit var document: Node
-
-    private var project: MavenProject? = project
-    private var log: Log? = log
 
 
     init {

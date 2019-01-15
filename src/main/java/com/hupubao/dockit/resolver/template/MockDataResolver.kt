@@ -4,6 +4,13 @@ import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.fastjson.serializer.SerializerFeature
+import com.github.javaparser.JavaParser
+import com.github.javaparser.ast.Node
+import com.github.javaparser.ast.body.BodyDeclaration
+import com.github.javaparser.ast.body.FieldDeclaration
+import com.github.javaparser.ast.body.VariableDeclarator
+import com.github.javaparser.ast.comments.Comment
+import com.github.javaparser.utils.ParserCollectionStrategy
 import com.github.jsonzou.jmockdata.JMockData
 import com.hupubao.dockit.entity.Argument
 import com.hupubao.dockit.entity.MethodCommentNode
@@ -11,21 +18,20 @@ import com.hupubao.dockit.utils.MockUtils
 import com.hupubao.dockit.utils.ProjectUtils
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.project.MavenProject
+import java.io.File
+import java.nio.file.Paths
 import java.util.*
 import java.util.stream.Collectors
 import kotlin.random.Random
 
-class MockDataResolver(project: MavenProject?, log: Log?) {
+class MockDataResolver(private var project: MavenProject, private var log: Log) {
 
 
-    private var project: MavenProject? = project
-    private var log: Log? = log
-
-    private val SAMPLE_TYPE_ARRAY =
+    private val sampleTypeArray =
         arrayOf("integer", "short", "long", "double", "float", "byte", "char", "string", "boolean")
 
 
-    public fun mockResponseData(methodCommentNode: MethodCommentNode): String {
+    fun mockResponseData(methodCommentNode: MethodCommentNode): String {
         var result = ""
         val methodCommentNodeClone = methodCommentNode.clone()
         if (methodCommentNodeClone.responseObjectClassName != null) {
@@ -43,21 +49,42 @@ class MockDataResolver(project: MavenProject?, log: Log?) {
                 methodCommentNodeClone.responseObjectClassName!!
             }
 
-            val clazzOptional = ProjectUtils.loadClass(project!!, log!!, methodCommentNodeClone.responseObjectClassName!!)
-            clazzOptional.ifPresent { clazz ->
-                if (isList) {
+            // parse javadoc
+            // 先找到project的目录，再拼上包路径，找java源文件，JavaParser.parse
+            project.compileSourceRoots.forEach {
+                val projectRoot = ParserCollectionStrategy().collect(Paths.get(it.toString()))
+                val filePath =
+                    projectRoot.root.toString() +
+                            "/" + methodCommentNodeClone.responseObjectClassName!!.replace(
+                        ".",
+                        "/"
+                    ) + ".java"
 
+                val file = File(filePath)
+                val compilationUnit = JavaParser.parse(file)
+                compilationUnit.comments.forEach { comment ->
+                    comment.commentedNode.ifPresent { commentNode ->
+                        if (commentNode is FieldDeclaration && commentNode.childNodes.size > 0) {
+                            val arg = commentNode.childNodes[0]
+                            val javaDoc = comment.asJavadocComment().parse()
+                            if (arg is VariableDeclarator) {
+                                val argument = Argument(
+                                    arg.nameAsString,
+                                    arg.nameAsString,
+                                    javaDoc.toText(),
+                                    "Yes",
+                                    arg.typeAsString
+                                )
+                                methodCommentNode.responseArgList.add(argument)
+                            }
+                        }
+                    }
                 }
-                methodCommentNodeClone.responseArgList = Arrays.stream(clazz.declaredFields).map { f ->
-                    // parse javadoc
-
-                    Argument(f.name, f.name, f.name, "Yes", f.type.simpleName)
-                }.collect(Collectors.toList())
-                result = mockJSONObjectData(clazz)
             }
-        } else {
-            result = mockData(methodCommentNodeClone.responseArgList)
+
+
         }
+        result = mockData(methodCommentNodeClone.responseArgList)
 
         return result
     }
@@ -98,7 +125,7 @@ class MockDataResolver(project: MavenProject?, log: Log?) {
     }
 
     private fun getArgumentJavaType(argument: Argument): Optional<Class<*>> {
-        if (SAMPLE_TYPE_ARRAY.contains(argument.type.toLowerCase())) {
+        if (sampleTypeArray.contains(argument.type.toLowerCase())) {
             return try {
                 Optional.of(Class.forName("java.lang.${argument.type}"))
             } catch (e: Exception) {

@@ -27,7 +27,7 @@ ${status}
 
 #### 返回示例
 
-``` json
+```json
 ${resSample}
 
 ```
