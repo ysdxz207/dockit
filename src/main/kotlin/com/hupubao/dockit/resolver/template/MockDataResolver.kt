@@ -32,28 +32,8 @@ class MockDataResolver(private var project: MavenProject, private var log: Log) 
 
 
     fun mockResponseData(methodCommentNode: MethodCommentNode): String {
-        var result = ""
         val methodCommentNodeClone = methodCommentNode.clone()
-        if (methodCommentNodeClone.responseObjectClassName != null) {
-            val isList: Boolean
-            val subClassName: String = if (methodCommentNodeClone.responseObjectClassName!!.contains("<")) {
-                // list
-                isList = true
-                methodCommentNodeClone.responseObjectClassName!!.substring(
-                    methodCommentNodeClone.responseObjectClassName!!.indexOf("<") + 1,
-                    methodCommentNodeClone.responseObjectClassName!!.indexOf(">")
-                )
-            } else {
-                // object
-                isList = false
-                methodCommentNodeClone.responseObjectClassName!!
-            }
-
-            parseResponseArgList(project, methodCommentNodeClone)
-        }
-        result = mockData(methodCommentNodeClone.responseArgList)
-
-        return result
+        return mockData(methodCommentNodeClone.responseArgList)
     }
 
     private fun parseResponseArgList(
