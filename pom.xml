@@ -10,7 +10,7 @@
     <version>2.0.0.RELEASE</version>
     <url>https://github.com/ysdxz207/dockit</url>
     <name>dockit</name>
-    <description>基于javadoc的Markdown文档生成工具。Markdown document generator via javadoc.</description>
+    <description>基于javadoc的Markdown文档生成工具。Markdown document generator base on javadoc.</description>
 
     <pluginRepositories>
         <pluginRepository>
