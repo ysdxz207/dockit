@@ -7,7 +7,7 @@
     <groupId>win.hupubao</groupId>
     <artifactId>dockit-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <url>https://github.com/ysdxz207/dockit</url>
     <name>dockit</name>
     <description>基于javadoc的Markdown文档生成工具。Markdown document generator via javadoc.</description>
@@ -117,6 +117,8 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>

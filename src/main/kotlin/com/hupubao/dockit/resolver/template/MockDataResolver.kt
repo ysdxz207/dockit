@@ -49,44 +49,57 @@ class MockDataResolver(private var project: MavenProject, private var log: Log) 
                 methodCommentNodeClone.responseObjectClassName!!
             }
 
-            // parse javadoc
-            // 先找到project的目录，再拼上包路径，找java源文件，JavaParser.parse
-            project.compileSourceRoots.forEach {
-                val projectRoot = ParserCollectionStrategy().collect(Paths.get(it.toString()))
-                val filePath =
-                    projectRoot.root.toString() +
-                            "/" + methodCommentNodeClone.responseObjectClassName!!.replace(
-                        ".",
-                        "/"
-                    ) + ".java"
-
-                val file = File(filePath)
-                val compilationUnit = JavaParser.parse(file)
-                compilationUnit.comments.forEach { comment ->
-                    comment.commentedNode.ifPresent { commentNode ->
-                        if (commentNode is FieldDeclaration && commentNode.childNodes.size > 0) {
-                            val arg = commentNode.childNodes[0]
-                            val javaDoc = comment.asJavadocComment().parse()
-                            if (arg is VariableDeclarator) {
-                                val argument = Argument(
-                                    arg.nameAsString,
-                                    arg.nameAsString,
-                                    javaDoc.toText(),
-                                    "Yes",
-                                    arg.typeAsString
-                                )
-                                methodCommentNode.responseArgList.add(argument)
-                            }
-                        }
-                    }
-                }
-            }
-
-
+            parseResponseArgList(project, methodCommentNodeClone)
         }
         result = mockData(methodCommentNodeClone.responseArgList)
 
         return result
+    }
+
+    private fun parseResponseArgList(
+        project: MavenProject,
+        methodCommentNodeClone: MethodCommentNode
+    ) {
+
+        // parse javadoc
+        // 先找到project的目录，再拼上包路径，找java源文件，再进行JavaParser.parse
+        project.compileSourceRoots.forEach {
+            val projectRoot = ParserCollectionStrategy().collect(Paths.get(it.toString()))
+            val filePath =
+                projectRoot.root.toString() +
+                        "/" + methodCommentNodeClone.responseObjectClassName!!.replace(
+                    ".",
+                    "/"
+                ) + ".java"
+
+            val file = File(filePath)
+            val compilationUnit = JavaParser.parse(file)
+            compilationUnit.comments.forEach { comment ->
+                comment.commentedNode.ifPresent { commentNode ->
+                    if (commentNode is FieldDeclaration && commentNode.childNodes.size > 0) {
+
+                        val arg = commentNode.childNodes[0]
+                        val javaDoc = comment.asJavadocComment().parse()
+                        val required =
+                            javaDoc.blockTags.find { tag -> tag.tagName == "required" }?.content?.toText() ?: "Yes"
+                        if (arg is VariableDeclarator) {
+                            var type = arg.typeAsString
+                            if (!type.startsWith("java.lang.")) {
+                                type = "Object"
+                            }
+                            val argument = Argument(
+                                arg.nameAsString,
+                                arg.nameAsString,
+                                javaDoc.description.toText(),
+                                required,
+                                type
+                            )
+                            methodCommentNodeClone.responseArgList.add(argument)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun mockData(resArgList: List<Argument>): String {
@@ -136,12 +149,4 @@ class MockDataResolver(private var project: MavenProject, private var log: Log) 
         return Optional.empty()
     }
 
-    private fun mockJSONObjectData(clazz: Class<*>): String {
-        val data = if (clazz.newInstance() is Iterable<*>) {
-            mutableListOf(clazz)
-        } else {
-            JMockData.mock(clazz)
-        }
-        return JSON.toJSONString(data, SerializerFeature.PrettyFormat)
-    }
 }

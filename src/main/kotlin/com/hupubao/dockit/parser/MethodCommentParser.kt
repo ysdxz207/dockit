@@ -75,7 +75,7 @@ open class MethodCommentParser {
             if (tagMethod.type == JavadocBlockTag.Type.RETURN) {
                 if (!tagMethod.content.isEmpty) {
                     val linkTypeStream = tagMethod.content.elements.stream().filter { javadocDescriptionElement ->
-                        javadocDescriptionElement is JavadocInlineTag && javadocDescriptionElement.type == JavadocInlineTag.Type.LINK
+                        javadocDescriptionElement is JavadocInlineTag && javadocDescriptionElement.type == JavadocInlineTag.Type.LINKPLAIN
                     }.findFirst()
 
                     if (linkTypeStream.isPresent) {
