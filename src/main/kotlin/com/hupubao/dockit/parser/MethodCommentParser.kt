@@ -7,6 +7,7 @@ import com.github.javaparser.javadoc.description.JavadocInlineTag
 import com.hupubao.dockit.constants.TemplatePlaceholder
 import com.hupubao.dockit.entity.Argument
 import com.hupubao.dockit.entity.MethodCommentNode
+import com.hupubao.dockit.enums.ArgumentType
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.project.MavenProject
 import java.util.*
@@ -57,10 +58,7 @@ open class MethodCommentParser {
                 if (tagMethod.content.isEmpty) {
                     continue
                 }
-
-                methodCommentNode.requestArgList.add(
-                    parseArgument(tagMethod)
-                )
+                parseNestedArgument(methodCommentNode, tagMethod, ArgumentType.REQUEST)
             }
             if (tagMethod.tagName == TemplatePlaceholder.resArg) {
 
@@ -68,7 +66,7 @@ open class MethodCommentParser {
                     continue
                 }
 
-                parseResArgument(methodCommentNode, tagMethod)
+                parseNestedArgument(methodCommentNode, tagMethod, ArgumentType.RESPONSE)
             }
 
 
@@ -103,7 +101,7 @@ open class MethodCommentParser {
         val argType = if (argInfo.size > 1) {
             argInfo[1].trim()
         } else {
-            "Object"
+            "Unknown"
         }
 
         val argRequired = if (argInfo.size > 2) {
@@ -121,8 +119,12 @@ open class MethodCommentParser {
         )
     }
 
-    private fun parseResArgument(methodCommentNode: MethodCommentNode,
-                              tagMethod: JavadocBlockTag) {
+
+    private fun parseNestedArgument(
+        methodCommentNode: MethodCommentNode,
+        tagMethod: JavadocBlockTag,
+        argumentType: ArgumentType
+    ) {
 
         val argument = parseArgument(tagMethod)
 
@@ -133,7 +135,14 @@ open class MethodCommentParser {
             val parentProperty = argument.originName.substring(0, argument.originName.lastIndexOf("."))
             val property = argNameArr[argNameArr.size - 1]
 
-            val parentArgument = findParentResArgument(methodCommentNode.responseArgList, parentProperty)
+            val parentArgument = findParentArgument(
+                when (argumentType) {
+                    ArgumentType.REQUEST -> methodCommentNode.requestArgList
+                    else -> {
+                        methodCommentNode.responseArgList
+                    }
+                }, parentProperty
+            )
 
 
             if (parentArgument != null) {
@@ -144,21 +153,26 @@ open class MethodCommentParser {
             }
 
         } else {
-            methodCommentNode.responseArgList.add(argument)
+            when (argumentType) {
+                ArgumentType.REQUEST -> methodCommentNode.requestArgList.add(argument)
+                else -> {
+                    methodCommentNode.responseArgList.add(argument)
+                }
+            }
         }
     }
 
-    private fun findParentResArgument(resArgumentList: List<Argument>, parentProperty: String): Argument? {
+    private fun findParentArgument(argumentList: List<Argument>, parentProperty: String): Argument? {
 
-        var argument = resArgumentList.find { argument -> argument.originName == parentProperty }
+        var argument = argumentList.find { argument -> argument.originName == parentProperty }
 
         if (argument != null) {
             return argument
         }
 
-        resArgumentList.forEach { arg ->
+        argumentList.forEach { arg ->
             if (!arg.children.isEmpty()) {
-                argument = findParentResArgument(arg.children, parentProperty)
+                argument = findParentArgument(arg.children, parentProperty)
 
                 if (argument != null) {
                     return argument

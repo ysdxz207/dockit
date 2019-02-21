@@ -2,6 +2,7 @@ package com.hupubao.dockit.template
 
 import com.hupubao.dockit.entity.Argument
 import com.hupubao.dockit.entity.MethodCommentNode
+import com.hupubao.dockit.enums.ArgumentType
 import com.hupubao.dockit.resolver.template.MockDataResolver
 import com.hupubao.dockit.resolver.template.PlaceholderResolver
 import com.vladsch.flexmark.ast.Node
@@ -24,9 +25,11 @@ open class Template(
 
     private fun parse() {
         // 返回结果json示例
-        methodCommentNode.resSample = MockDataResolver(project, log).mockResponseData(methodCommentNode)
+        methodCommentNode.reqSample = MockDataResolver(project, log).mockData(methodCommentNode, ArgumentType.REQUEST)
+        methodCommentNode.resSample = MockDataResolver(project, log).mockData(methodCommentNode, ArgumentType.RESPONSE)
 
         // 解析模版前需要先把参数名拼接前缀
+        this.resolveArgumentsPrefix(methodCommentNode.requestArgList)
         this.resolveArgumentsPrefix(methodCommentNode.responseArgList)
 
         document = Parser.builder().build().parse(source)!!
@@ -65,6 +68,9 @@ open class Template(
         val sb = StringBuilder()
         for (node in document.children) {
             sb.append(node.chars).append(BasedSequence.EOL_CHARS)
+            if (!node.chars.endsWith(BasedSequence.EOL)) {
+                sb.append(BasedSequence.EOL_CHARS)
+            }
         }
 
         return sb.toString()

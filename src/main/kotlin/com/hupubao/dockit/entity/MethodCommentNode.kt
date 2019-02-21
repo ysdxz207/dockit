@@ -24,6 +24,8 @@ open class MethodCommentNode : Cloneable {
     @Placeholder(TemplatePlaceholder.resArg, type = PlaceholderType.LIST)
     var responseArgList: MutableList<Argument> = mutableListOf()
     var responseObjectClassName: String? = null
+    @Placeholder(TemplatePlaceholder.reqSample)
+    var reqSample: String = ""
     @Placeholder(TemplatePlaceholder.resSample)
     var resSample: String = ""
     @Placeholder(TemplatePlaceholder.remark)

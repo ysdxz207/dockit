@@ -9,6 +9,7 @@ object TemplatePlaceholder {
     const val url = "url"
     const val method = "method"
     const val arg = "arg"
+    const val reqSample = "reqSample"
     const val resArg = "resArg"
     const val resSample = "resSample"
     const val remark = "remark"
