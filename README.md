@@ -29,7 +29,7 @@
 <plugin>
     <groupId>win.hupubao</groupId>
     <artifactId>dockit-maven-plugin</artifactId>
-    <version>2.0.0.RELEASE</version>
+    <version>2.1.0.RELEASE</version>
     <configuration>
         <templateCharset>UTF-8</templateCharset>
         <singleOutDir>false</singleOutDir>
@@ -65,6 +65,9 @@
  * @method POST
  * @arg pageNum,Integer,是,页码
  * @arg pageSize,Integer,否,分页大小
+ * @arg obj, Object, 否, 参数
+ * @arg obj.name, String, 否, 名称
+ * @arg obj.createTime, String, 否, 创建事件
  * @resArg service,Object,是,请求服务，原样返回
  * @resArg service.subObject,Object,是,service子对象
  * @resArg service.subObject.id,Integer,是,service子对象ID
