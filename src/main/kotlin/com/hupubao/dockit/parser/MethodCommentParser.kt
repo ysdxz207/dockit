@@ -94,8 +94,13 @@ open class MethodCommentParser {
         if (argInfo.size < 4) {
             return Argument("", "Unknown", "请检查javadoc格式是否正确", "", "")
         }
-        val argDescription = argInfo[3].trim()
+        val argDescription =
+            (if (argInfo.size > 4) argText.substring(argText.indexOf(argInfo[3])) else argInfo[3]).trim()
 
+
+        if (argInfo.size > 4) {
+            println("dd")
+        }
         val argName = argInfo[0].trim()
 
         val argType = if (argInfo.size > 1) {
