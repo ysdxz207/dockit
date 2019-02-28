@@ -83,7 +83,7 @@ class MockDataResolver(private var project: MavenProject, private var log: Log) 
             return try {
                 Optional.of(Class.forName("java.lang.${argument.type}"))
             } catch (e: Exception) {
-                ProjectUtils.loadClass(project!!, log!!, argument.name)
+                ProjectUtils.loadClass(project, log, argument.name)
             }
         }
 
