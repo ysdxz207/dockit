@@ -80,14 +80,20 @@ class MockDataResolver(private var project: MavenProject, private var log: Log) 
 
     private fun getArgumentJavaType(argument: Argument): Optional<Class<*>> {
         if (sampleTypeArray.contains(argument.type.toLowerCase())) {
+            val argumentType = makeFirstCharacterUpper(argument.type)
             return try {
-                Optional.of(Class.forName("java.lang.${argument.type}"))
+                Optional.of(Class.forName("java.lang.$argumentType"))
             } catch (e: Exception) {
+                log.warn("[dockit]Can not load java type [$argumentType] try to load class [${argument.name}] .")
                 ProjectUtils.loadClass(project, log, argument.name)
             }
         }
 
         return Optional.empty()
+    }
+
+    private fun makeFirstCharacterUpper(str: String): String {
+        return str[0].toUpperCase() + str.toLowerCase().removeRange(0, 1)
     }
 
 }
