@@ -29,7 +29,7 @@
 <plugin>
     <groupId>com.hupubao</groupId>
     <artifactId>dockit-maven-plugin</artifactId>
-    <version>2.1.2.RELEASE</version>
+    <version>2.1.3.RELEASE</version>
     <configuration>
         <templateCharset>UTF-8</templateCharset>
         <singleOutDir>false</singleOutDir>
@@ -108,7 +108,9 @@
  
  **历史更新**
  
- - **2019-08-29因更换域名，更换了插件的groupId从win.hupubao改为com.hupubao**
+ - **2.1.3.RELEASE**
+ 
+ 1. 2019-08-29因更换域名，更换了插件的groupId从win.hupubao改为com.hupubao
  
  - **2.1.1.RELEASE**
  
