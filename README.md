@@ -94,7 +94,7 @@
  
  ```
  
- - 生成[样例](./example/afu.md)
+ - 生成[样例](https://github.com/ysdxz207/dockit/blob/master/example/afu.md)
  
  - 标签释义
  
