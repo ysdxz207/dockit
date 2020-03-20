@@ -64,6 +64,8 @@ class DockitMojo : AbstractMojo() {
             outDir = Paths.get(project.build.directory, "dockit").toString()
         }
 
+        outDir = outDir.replace("\\", "/")
+
         val outDirFifle = File(outDir)
         if (!outDirFifle.exists()) {
             outDirFifle.mkdirs();
