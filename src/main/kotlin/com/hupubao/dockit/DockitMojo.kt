@@ -10,6 +10,7 @@ import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
 import org.apache.maven.project.MavenProject
+import java.awt.Desktop
 import java.io.File
 import java.nio.charset.Charset
 import java.nio.file.Paths
@@ -20,6 +21,7 @@ import java.nio.file.Paths
  */
 @Mojo(name = "dockit", defaultPhase = LifecyclePhase.COMPILE, requiresDependencyResolution = ResolutionScope.COMPILE)
 class DockitMojo : AbstractMojo() {
+
 
     @Parameter(defaultValue = "DEFAULT", property = "template", required = true)
     lateinit var template: String
@@ -32,6 +34,9 @@ class DockitMojo : AbstractMojo() {
 
     @Parameter(defaultValue = "false", property = "singleOutDir", required = false)
     lateinit var singleOutDir: String
+
+    @Parameter(defaultValue = "false", property = "autoOpenOutDir", required = false)
+    lateinit var autoOpenOutDir: String
 
     @Parameter(defaultValue = "\${project}", required = true, readonly = true)
     lateinit var project: MavenProject
@@ -50,11 +55,22 @@ class DockitMojo : AbstractMojo() {
             templateText = File(template).readText(Charset.forName(templateCharset))
         }
 
+        log.info("[dockit]Load template :$template success.")
+
 
         val classNodeList = CommentParser.parseComments(project, log)
 
         if (outDir == "DEFAULT") {
             outDir = Paths.get(project.build.directory, "dockit").toString()
+        }
+
+        val outDirFifle = File(outDir)
+        if (!outDirFifle.exists()) {
+            outDirFifle.mkdirs();
+        }
+
+        if (classNodeList.isEmpty()) {
+            log.info("[dockit]Nothing to generate, are you sure you have a \"@dockit\" label in your class java doc ?")
         }
 
         classNodeList.parallelStream().forEach { classNode ->
@@ -86,10 +102,19 @@ class DockitMojo : AbstractMojo() {
                 }
                 file.createNewFile()
                 log.info("[dockit]Generate doc to $pathOut")
+
+
                 file.writeText(mdText)
             }
 
         }
+
+
+        // 打开目录
+        if (autoOpenOutDir.toBoolean() && Desktop.isDesktopSupported()) {
+            Desktop.getDesktop().open(outDirFifle)
+        }
+
 
     }
 

@@ -34,6 +34,8 @@
         <templateCharset>UTF-8</templateCharset>
         <singleOutDir>false</singleOutDir>
         <outDir>${project.build.directory}/dockit</outDir>
+        <!-- 自动打开生成的文档目录，默认false -->
+        <autoOpenOutDir>true</autoOpenOutDir>
         <!-- 这里可以选择自定义模版 -->
         <!--<template>${basedir}/src/main/resources/dockit/TEMPLATE.MD</template>-->
     </configuration>
