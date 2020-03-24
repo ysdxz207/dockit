@@ -39,6 +39,7 @@
         <!-- 这里可以选择自定义模版 -->
         <!--<template>${basedir}/src/main/resources/dockit/TEMPLATE.MD</template>-->
     </configuration>
+    <!--
     <executions>
         <execution>
             <phase>compile</phase>
@@ -47,6 +48,7 @@
             </goals>
         </execution>
     </executions>
+    -->
 </plugin>
 
 ```
