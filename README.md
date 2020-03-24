@@ -42,7 +42,7 @@
     <!--
     <executions>
         <execution>
-            <phase>compile</phase>
+            <phase>package</phase>
             <goals>
                 <goal>dockit</goal>
             </goals>
