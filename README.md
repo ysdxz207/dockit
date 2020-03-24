@@ -29,7 +29,7 @@
 <plugin>
     <groupId>com.hupubao</groupId>
     <artifactId>dockit-maven-plugin</artifactId>
-    <version>2.1.3.RELEASE</version>
+    <version>2.1.4.RELEASE</version>
     <configuration>
         <templateCharset>UTF-8</templateCharset>
         <singleOutDir>false</singleOutDir>
@@ -110,6 +110,11 @@
  
  
  **历史更新**
+ 
+ - **2.1.4.RELEASE**
+ 
+ 1. 增加了参数：autoOpenOutDir，当环境支持的时候，会自动打开生成的文档所在的目录。
+ 2. 增加了未配置`@dockit`时的日志输出。
  
  - **2.1.3.RELEASE**
  
