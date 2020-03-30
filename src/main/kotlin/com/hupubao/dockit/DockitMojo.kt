@@ -23,15 +23,27 @@ import java.nio.file.Paths
 class DockitMojo : AbstractMojo() {
 
 
+    /**
+     * 模版路径，默认为：resources/template/DEFAULT.MD
+     */
     @Parameter(defaultValue = "DEFAULT", property = "template", required = true)
     lateinit var template: String
 
+    /**
+     * 模版字符编码
+     */
     @Parameter(defaultValue = "UTF-8", property = "templateCharset", required = true)
     lateinit var templateCharset: String
 
+    /**
+     * 文档输出目录
+     */
     @Parameter(defaultValue = "DEFAULT", property = "outDir", required = true)
     lateinit var outDir: String
 
+    /**
+     * 是否使用单目录结构
+     */
     @Parameter(defaultValue = "false", property = "singleOutDir", required = false)
     lateinit var singleOutDir: String
 

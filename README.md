@@ -32,6 +32,7 @@
     <version>2.1.3.RELEASE</version>
     <configuration>
         <templateCharset>UTF-8</templateCharset>
+        <!-- 是否使用单目录结构 -->
         <singleOutDir>false</singleOutDir>
         <outDir>${project.build.directory}/dockit</outDir>
         <!-- 自动打开生成的文档目录，默认false -->
