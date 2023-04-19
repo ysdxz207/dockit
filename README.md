@@ -1,7 +1,5 @@
 # Dockit
 
-##### :sob: :sob: 别光fork啊，麻烦点个star:sob:
-
 > ## Dockit 是一个通过javadoc生成markdown文档的生成工具。
 
 - 不依赖于@RequestMapping注解，直接根据javadoc中是否有@title来生成接口文档
